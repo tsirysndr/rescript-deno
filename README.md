@@ -19,3 +19,20 @@ Include them in your `rescript.json`:
   "bs-dependencies": ["@rescript/core", "rescript-deno"]
 }
 ```
+
+`rescript-deno` is [namespaced](https://rescript-lang.org/docs/manual/latest/build-configuration#name-namespace), so you'll find all modules listed under the main module `RescriptBun`.
+
+**You're strongly encouraged to open `RescriptDeno` globally, to get the best possible developer experience.** You do that by adding this to your `rescript.json`:
+
+```json
+{
+  "bsc-flags": [
+    "-open RescriptCore",
+    "-open RescriptDeno"
+  ]
+}
+```
+
+This might be a matter of taste, but I recommend opening it to get the best experience.
+
+This will make all of Deno available to you without needing to dip into the `RescriptDeno` module explicitly.
