@@ -13,3 +13,4 @@ type build = {
 @scope("Deno") @val external mainModule: string = "mainModule"
 @scope("Deno") @val external build: build = "build"
 @scope("Deno") @val external env: Env.t = "env"
+@scope("Deno") @val external exit: int => unit = "exit"
