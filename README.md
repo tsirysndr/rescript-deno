@@ -1,4 +1,4 @@
-# rescript-deno
+# rescript-deno 🦕
 
 Use [Deno](https://deno.com/) with [ReScript](https://rescript-lang.org/).
 
