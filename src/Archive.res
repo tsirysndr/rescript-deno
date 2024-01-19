@@ -14,11 +14,21 @@ module Tar = {
 module Untar = {
   type t
 
+  module TarMetaWithLinkName = {
+    type t = {linkName?: string}
+  }
+
+  module TarHeader = {
+    type t = Dict.t<Uint8Array.t>
+  }
+
   module TarEntry = {
+    open IO.Types
+
     type t
 
     @new @module("https://deno.land/std@0.212.0/archive/untar.ts")
-    external newTarEntry: Uint8Array.t => t = "TarEntry"
+    external newTarEntry: (TarMetaWithLinkName.t, Reader.t, TarHeader.t) => t = "TarEntry"
 
     @send external discard: t => unit = "discard"
 
