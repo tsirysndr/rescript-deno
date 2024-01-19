@@ -1,4 +1,5 @@
 open Archive.Tar
+open Archive.Untar
 open IO
 open Globals
 
@@ -19,5 +20,11 @@ tar->append("hello.txt", {reader: b, contentSize: b->Buffer.bytes->TypedArray.le
 Console.log(tar)
 
 Console.log(tar->getReader)
+
+let reader = tar->getReader
+
+let untar = newUntar(reader)
+
+Console.log(await untar->extract)
 
 Deno.exit(0)
