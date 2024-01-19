@@ -76,4 +76,10 @@ assertThrows(() => {
 
 Console.log(equal({a: 1}, {a: 1}))
 
+let c = AbortController.new()
+
+Console.log(c->AbortController.signal)
+
+Console.log(URL.new("https://deno.land")->URL.toString)
+
 Deno.exit(0)
