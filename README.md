@@ -2,6 +2,8 @@
 
 Use [Deno](https://deno.com/) with [ReScript](https://rescript-lang.org/).
 
+> Note: This is a work in progress. 🏗️🚧
+>
 > Project Status: 🐲 Unstable, alpha-ish quality.
 
 🚚 Install
