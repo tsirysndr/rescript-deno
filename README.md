@@ -28,7 +28,8 @@ Include them in your `rescript.json`:
 {
   "bsc-flags": [
     "-open RescriptCore",
-    "-open RescriptDeno"
+    "-open RescriptDeno",
+    "-open RescriptDeno.Globals"
   ]
 }
 ```
