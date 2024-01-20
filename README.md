@@ -77,52 +77,17 @@ There's still a good amount of bindings missing. Here's what's currently availab
 - [ ] Scheduling
 - [ ] Streams API
 - [ ] Sub Process
-
-TODO
-
-### Testing
-
-TODO
-
-### Timers
-
-TODO
-
-### Typed Arrays
-
-TODO
-
-### Web APIs
-
-TODO
-
-### Web Crypto API
-
-TODO
-
-### Web File API
-
-TODO
-
-### Web Sockets
-
-TODO
-
-### Web Storage API
-
-TODO
-
-### Web Workers
-
-TODO
-
-### WebAssembly
-
-TODO
-
-### WebGPU
-
-TODO
+- [ ]Testing
+- [ ] Timers
+- [ ] Typed Arrays
+- [ ] Web APIs
+- [ ] Web Crypto API
+- [ ] Web File API
+- [ ] Web Sockets
+- [ ] Web Storage API
+- [ ] Web Workers
+- [ ] WebAssembly
+- [ ] WebGPU
 
 
 ## 🤝 Contributing
