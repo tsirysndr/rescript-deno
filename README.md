@@ -77,7 +77,7 @@ There's still a good amount of bindings missing. Here's what's currently availab
 - [ ] Scheduling
 - [ ] Streams API
 - [ ] Sub Process
-- [ ]Testing
+- [ ] Testing
 - [ ] Timers
 - [ ] Typed Arrays
 - [ ] Web APIs
