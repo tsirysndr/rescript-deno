@@ -1,3 +1,5 @@
+![cover](https://cdn.jsdelivr.net/gh/tsirysndr/rescript-deno@main/.github/images/cover.png)
+
 # rescript-deno 🦕
 
 Use [Deno](https://deno.com/) with [ReScript](https://rescript-lang.org/).
