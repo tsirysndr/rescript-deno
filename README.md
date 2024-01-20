@@ -52,6 +52,13 @@ Deno.serveWithOptions({port: 8007}, ~handler=req => {
 })->ignore
 ```
 
+Make a request to a server:
+
+```rescript
+let result = await fetch(String("https://rickandmortyapi.com/api/character"))
+Console.log(await result->Response.json)
+```
+
 See [playground](playground) directory in this repo for more examples.
 
 ## 📑 Current Coverage
@@ -81,11 +88,11 @@ There's still a good amount of bindings missing. Here's what's currently availab
   - [ ] EventSource
   - [x] FormData
   - [x] Headers
-  - [ ] Request
+  - [x] Request
   - [x] Response
   - [x] ResponseInit
   - [x] BodyInit
-  - [ ] fetch
+  - [x] fetch
 - [x] File System
 - [ ] HTTP Server
   - [x] Deno.serve

@@ -438,7 +438,7 @@ let serveWithOptions = (
   switch (handler, asyncHandler) {
   | (None, None) => _serveWithOptions(~options)
   | (Some(handler), None) => _serveWithOptions(~options, ~handler)
-  | (None, Some(handler)) => _serve(~handler)
+  | (None, Some(handler)) => _serveWithOptions(~options, ~handler)
   | _ => failwith("serve: invalid arguments")
   }
 }

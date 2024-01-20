@@ -137,6 +137,16 @@ Deno.serve(~handler=req => {
 })->ignore
 */
 
-Deno.serveWithOptions({port: 9007}, ~handler=req => {
+/*
+let result = await fetch(String("https://rickandmortyapi.com/api/character"))
+Console.log(await result->Response.json)
+*/
+
+Deno.serveWithOptions({port: 9007}, ~asyncHandler=async req => {
+  let headers = req->Request.headers
+  let body = await req->Request.text
+  Console.log(headers)
+  Console.log(headers->Headers.get("User-Agent"))
+  Console.log(body)
   Response.new(String("Hello, world!"))
 })->ignore

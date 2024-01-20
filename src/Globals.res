@@ -569,8 +569,232 @@ module ResponseInit = {
   }
 }
 
+module RequestInit = {
+  type t = {
+    body?: BodyInit.t,
+    cache?: string,
+    credentials?: string,
+    destination?: string,
+    headers?: Belt.Map.String.t<string>,
+    integrity?: string,
+    keepalive?: bool,
+    method?: string,
+    mode?: string,
+    redirect?: string,
+    referer?: string,
+    refererPolicy?: string,
+    signal?: AbortSignal.t,
+    window?: Window.t,
+  }
+
+  type _t<'a> = {
+    body?: 'a,
+    cache?: option<string>,
+    credentials?: option<string>,
+    destination?: option<string>,
+    headers?: option<Belt.Map.String.t<string>>,
+    integrity?: option<string>,
+    keepalive?: option<bool>,
+    method?: option<string>,
+    mode?: option<string>,
+    redirect?: option<string>,
+    referer?: option<string>,
+    refererPolicy?: option<string>,
+    signal?: option<AbortSignal.t>,
+    window?: option<Window.t>,
+  }
+
+  @new
+  let _newBlob = (init: t, body: Blob.t) => {
+    {
+      body: Some(body),
+      cache: init.cache,
+      credentials: init.credentials,
+      destination: init.destination,
+      headers: init.headers,
+      integrity: init.integrity,
+      keepalive: init.keepalive,
+      method: init.method,
+      mode: init.mode,
+      redirect: init.redirect,
+      referer: init.referer,
+      refererPolicy: init.refererPolicy,
+      signal: init.signal,
+      window: init.window,
+    }
+  }
+
+  @new
+  let _newBufferSource = (init: t, body: BufferSource.t) => {
+    {
+      body: Some(body),
+      cache: init.cache,
+      credentials: init.credentials,
+      destination: init.destination,
+      headers: init.headers,
+      integrity: init.integrity,
+      keepalive: init.keepalive,
+      method: init.method,
+      mode: init.mode,
+      redirect: init.redirect,
+      referer: init.referer,
+      refererPolicy: init.refererPolicy,
+      signal: init.signal,
+      window: init.window,
+    }
+  }
+
+  @new
+  let _newFormData = (init: t, body: FormData.t) => {
+    {
+      body: Some(body),
+      cache: init.cache,
+      credentials: init.credentials,
+      destination: init.destination,
+      headers: init.headers,
+      integrity: init.integrity,
+      keepalive: init.keepalive,
+      method: init.method,
+      mode: init.mode,
+      redirect: init.redirect,
+      referer: init.referer,
+      refererPolicy: init.refererPolicy,
+      signal: init.signal,
+      window: init.window,
+    }
+  }
+
+  @new
+  let _newURLSearchParams = (init: t, body: URLSearchParams.t) => {
+    {
+      body: Some(body),
+      cache: init.cache,
+      credentials: init.credentials,
+      destination: init.destination,
+      headers: init.headers,
+      integrity: init.integrity,
+      keepalive: init.keepalive,
+      method: init.method,
+      mode: init.mode,
+      redirect: init.redirect,
+      referer: init.referer,
+      refererPolicy: init.refererPolicy,
+      signal: init.signal,
+      window: init.window,
+    }
+  }
+
+  @new
+  let _newReadableStream = (init: t, body: ReadableStream.t<Uint8Array.t>) => {
+    {
+      body: Some(body),
+      cache: init.cache,
+      credentials: init.credentials,
+      destination: init.destination,
+      headers: init.headers,
+      integrity: init.integrity,
+      keepalive: init.keepalive,
+      method: init.method,
+      mode: init.mode,
+      redirect: init.redirect,
+      referer: init.referer,
+      refererPolicy: init.refererPolicy,
+      signal: init.signal,
+      window: init.window,
+    }
+  }
+
+  @new
+  let _newString = (init: t, body: string) => {
+    {
+      body: Some(body),
+      cache: init.cache,
+      credentials: init.credentials,
+      destination: init.destination,
+      headers: init.headers,
+      integrity: init.integrity,
+      keepalive: init.keepalive,
+      method: init.method,
+      mode: init.mode,
+      redirect: init.redirect,
+      referer: init.referer,
+      refererPolicy: init.refererPolicy,
+      signal: init.signal,
+      window: init.window,
+    }
+  }
+}
+
+module RequestInput = {
+  type t = String(string) | URL(URL.t)
+}
+
 module Request = {
+  open RequestInit
   type t
+
+  @get external cache: t => string = "cache"
+  @get external credentials: t => string = "credentials"
+  @get external destination: t => string = "destination"
+  @get external headers: t => Headers.t = "headers"
+  @get external integrity: t => string = "integrity"
+  @get external isHistoryNavigation: t => bool = "isHistoryNavigation"
+  @get external isReloadNavigation: t => bool = "isReloadNavigation"
+  @get external keepalive: t => bool = "keepalive"
+  @get external method: t => string = "method"
+  @get external mode: t => string = "mode"
+  @get external redirect: t => string = "redirect"
+  @get external referer: t => string = "referer"
+  @get external refererPolicy: t => string = "refererPolicy"
+  @get external signal: t => AbortSignal.t = "signal"
+  @get external url: t => string = "url"
+  @send external clone: t => t = "clone"
+
+  @new external _new: ('a, ~init: 'b=?) => t = "Request"
+
+  @new
+  let new = (input: RequestInput.t, ~init: option<RequestInit.t>=?) => {
+    switch (input, init) {
+    | (String(s), Some(init)) =>
+      switch init.body {
+      | Some(Blob(blob)) => _new(s, ~init=_newBlob(init, blob))
+      | Some(BufferSource(bufferSource)) => _new(s, ~init=_newBufferSource(init, bufferSource))
+      | Some(FormData(formData)) => _new(s, ~init=_newFormData(init, formData))
+      | Some(URLSearchParams(urlSearchParams)) =>
+        _new(s, ~init=_newURLSearchParams(init, urlSearchParams))
+      | Some(ReadableStream(readableStream)) =>
+        _new(s, ~init=_newReadableStream(init, readableStream))
+      | Some(String(string)) => _new(s, ~init=_newString(init, string))
+      | None => _new(s, ~init)
+      }
+    | (URL(url), Some(init)) =>
+      switch init.body {
+      | Some(Blob(blob)) => _new(url, ~init=_newBlob(init, blob))
+      | Some(BufferSource(bufferSource)) => _new(url, ~init=_newBufferSource(init, bufferSource))
+      | Some(FormData(formData)) => _new(url, ~init=_newFormData(init, formData))
+      | Some(URLSearchParams(urlSearchParams)) =>
+        _new(url, ~init=_newURLSearchParams(init, urlSearchParams))
+      | Some(ReadableStream(readableStream)) =>
+        _new(url, ~init=_newReadableStream(init, readableStream))
+      | Some(String(string)) => _new(url, ~init=_newString(init, string))
+      | None => _new(url, ~init)
+      }
+    | (String(s), None) => _new(s)
+    | (URL(url), None) => _new(url)
+    }
+  }
+
+  @send external clone: t => t = "clone"
+
+  @send external arrayBuffer: t => Promise.t<ArrayBuffer.t> = "arrayBuffer"
+
+  @send external blob: t => Promise.t<Blob.t> = "blob"
+
+  @send external formData: t => Promise.t<FormData.t> = "formData"
+
+  @send external json: t => Promise.t<'a> = "json"
+
+  @send external text: t => Promise.t<string> = "text"
 }
 
 module Response = {
@@ -584,7 +808,7 @@ module Response = {
   @get external \"type": t => string = "type"
   @get external url: t => string = "url"
 
-  @new external _new: ('a, ~init: option<ResponseInit.t>=?) => t = "Response"
+  @new external _new: ('a, ~init: 'b=?) => t = "Response"
   @new
   let new = (body: BodyInit.t, ~init: option<ResponseInit.t>=?) => {
     switch body {
@@ -596,5 +820,69 @@ module Response = {
     | String(string) => _new(string, ~init)
     }
   }
+
   @send external clone: t => t = "clone"
+
+  @send external arrayBuffer: t => Promise.t<ArrayBuffer.t> = "arrayBuffer"
+
+  @send external blob: t => Promise.t<Blob.t> = "blob"
+
+  @send external formData: t => Promise.t<FormData.t> = "formData"
+
+  @send external json: t => Promise.t<'a> = "json"
+
+  @send external text: t => Promise.t<string> = "text"
+}
+
+module FetchRequestInput = {
+  type t = String(string) | URL(URL.t) | Request(Request.t)
+}
+
+external _fetch: ('a, ~init: 'b=?) => Promise.t<Response.t> = "fetch"
+
+let fetch = (input: FetchRequestInput.t, ~init: option<RequestInit.t>=?) => {
+  switch (input, init) {
+  | (URL(input), Some(init)) =>
+    switch init.body {
+    | Some(Blob(blob)) => _fetch(input, ~init=RequestInit._newBlob(init, blob))
+    | Some(BufferSource(bufferSource)) =>
+      _fetch(input, ~init=RequestInit._newBufferSource(init, bufferSource))
+    | Some(FormData(formData)) => _fetch(input, ~init=RequestInit._newFormData(init, formData))
+    | Some(URLSearchParams(urlSearchParams)) =>
+      _fetch(input, ~init=RequestInit._newURLSearchParams(init, urlSearchParams))
+    | Some(ReadableStream(readableStream)) =>
+      _fetch(input, ~init=RequestInit._newReadableStream(init, readableStream))
+    | Some(String(string)) => _fetch(input, ~init=RequestInit._newString(init, string))
+    | None => _fetch(input, ~init)
+    }
+  | (URL(input), None) => _fetch(input)
+  | (Request(input), Some(init)) =>
+    switch init.body {
+    | Some(Blob(blob)) => _fetch(input, ~init=RequestInit._newBlob(init, blob))
+    | Some(BufferSource(bufferSource)) =>
+      _fetch(input, ~init=RequestInit._newBufferSource(init, bufferSource))
+    | Some(FormData(formData)) => _fetch(input, ~init=RequestInit._newFormData(init, formData))
+    | Some(URLSearchParams(urlSearchParams)) =>
+      _fetch(input, ~init=RequestInit._newURLSearchParams(init, urlSearchParams))
+    | Some(ReadableStream(readableStream)) =>
+      _fetch(input, ~init=RequestInit._newReadableStream(init, readableStream))
+    | Some(String(string)) => _fetch(input, ~init=RequestInit._newString(init, string))
+    | None => _fetch(input, ~init)
+    }
+  | (Request(input), None) => _fetch(input)
+  | (String(input), Some(init)) =>
+    switch init.body {
+    | Some(Blob(blob)) => _fetch(input, ~init=RequestInit._newBlob(init, blob))
+    | Some(BufferSource(bufferSource)) =>
+      _fetch(input, ~init=RequestInit._newBufferSource(init, bufferSource))
+    | Some(FormData(formData)) => _fetch(input, ~init=RequestInit._newFormData(init, formData))
+    | Some(URLSearchParams(urlSearchParams)) =>
+      _fetch(input, ~init=RequestInit._newURLSearchParams(init, urlSearchParams))
+    | Some(ReadableStream(readableStream)) =>
+      _fetch(input, ~init=RequestInit._newReadableStream(init, readableStream))
+    | Some(String(string)) => _fetch(input, ~init=RequestInit._newString(init, string))
+    | None => _fetch(input, ~init)
+    }
+  | (String(input), None) => _fetch(input)
+  }
 }
