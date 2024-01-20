@@ -1,3 +1,7 @@
+external atob: string => string = "atob"
+
+external btoa: string => string = "btoa"
+
 module EventTarget = {
   type t
   @send
@@ -6,7 +10,6 @@ module EventTarget = {
   external removeEventListener: (t, string, 'a, bool) => unit = "removeEventListener"
   @send external dispatchEvent: (t, 'a) => bool = "dispatchEvent"
 }
-
 module Event = {
   type t
   @get external bubbles: t => bool = "bubbles"
@@ -241,6 +244,7 @@ module Navigator = {
 
 module URLSearchParams = {
   type t
+  @new external new: 'a => t = "URLSearchParams"
   @get external size: t => int = "size"
   @send external append: (t, string, string) => unit = "append"
   @send external delete: (t, string) => unit = "delete"

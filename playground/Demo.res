@@ -95,4 +95,14 @@ let pattern = URLPattern.new(
 
 Console.log(pattern)
 
+type query = {foo: string}
+
+let params = URLSearchParams.new({foo: "bar"})
+
+Console.log(params->URLSearchParams.toString)
+
+Console.log(btoa("hello"))
+
+Console.log(atob("aGVsbG8gd29ybGQ="))
+
 Deno.exit(0)
