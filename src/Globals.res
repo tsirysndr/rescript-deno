@@ -570,7 +570,7 @@ module ResponseInit = {
 }
 
 module RequestInit = {
-  type t<'a> = {
+  type t<'a, 'b> = {
     body?: BodyInit.t,
     cache?: string,
     credentials?: string,
@@ -584,143 +584,161 @@ module RequestInit = {
     referer?: string,
     refererPolicy?: string,
     signal?: AbortSignal.t,
-    window?: Window.t,
+    window?: 'b,
   }
 
-  type _t<'a, 'b> = {
-    body?: 'a,
-    cache?: option<string>,
-    credentials?: option<string>,
-    destination?: option<string>,
-    headers?: option<'b>,
-    integrity?: option<string>,
-    keepalive?: option<bool>,
-    method?: option<string>,
-    mode?: option<string>,
-    redirect?: option<string>,
-    referer?: option<string>,
-    refererPolicy?: option<string>,
-    signal?: option<AbortSignal.t>,
-    window?: option<Window.t>,
+  type _t<'a, 'b, 'c> = {
+    body: 'a,
+    cache: string,
+    credentials: string,
+    destination: string,
+    headers: 'b,
+    integrity: string,
+    keepalive: bool,
+    method: string,
+    mode: string,
+    redirect: string,
+    referer: string,
+    refererPolicy: string,
+    signal: AbortSignal.t,
+    window: 'c,
   }
 
   @new
-  let _newBlob = (init: t<'a>, body: Blob.t) => {
+  let _newBlob = (init: t<'a, 'b>, body: Blob.t) => {
     {
       body: Some(body),
-      cache: init.cache,
-      credentials: init.credentials,
-      destination: init.destination,
+      cache: Belt.Option.getWithDefault(init.cache, ""),
+      credentials: Belt.Option.getWithDefault(init.credentials, ""),
+      destination: Belt.Option.getWithDefault(init.destination, ""),
       headers: init.headers,
-      integrity: init.integrity,
-      keepalive: init.keepalive,
-      method: init.method,
-      mode: init.mode,
-      redirect: init.redirect,
-      referer: init.referer,
-      refererPolicy: init.refererPolicy,
-      signal: init.signal,
-      window: init.window,
+      integrity: Belt.Option.getWithDefault(init.integrity, ""),
+      keepalive: Belt.Option.getWithDefault(init.keepalive, true),
+      method: Belt.Option.getWithDefault(init.method, "GET"),
+      mode: Belt.Option.getWithDefault(init.mode, "cors"),
+      redirect: Belt.Option.getWithDefault(init.redirect, "follow"),
+      referer: Belt.Option.getWithDefault(init.referer, ""),
+      refererPolicy: Belt.Option.getWithDefault(init.refererPolicy, ""),
+      signal: Belt.Option.getWithDefault(
+        init.signal,
+        AbortController.signal(AbortController.new()),
+      ),
+      window: Belt.Option.getWithDefault(init.window, Window.window),
     }
   }
 
   @new
-  let _newBufferSource = (init: t<'a>, body: BufferSource.t) => {
+  let _newBufferSource = (init: t<'a, 'b>, body: BufferSource.t) => {
     {
       body: Some(body),
-      cache: init.cache,
-      credentials: init.credentials,
-      destination: init.destination,
+      cache: Belt.Option.getWithDefault(init.cache, ""),
+      credentials: Belt.Option.getWithDefault(init.credentials, ""),
+      destination: Belt.Option.getWithDefault(init.destination, ""),
       headers: init.headers,
-      integrity: init.integrity,
-      keepalive: init.keepalive,
-      method: init.method,
-      mode: init.mode,
-      redirect: init.redirect,
-      referer: init.referer,
-      refererPolicy: init.refererPolicy,
-      signal: init.signal,
-      window: init.window,
+      integrity: Belt.Option.getWithDefault(init.integrity, ""),
+      keepalive: Belt.Option.getWithDefault(init.keepalive, true),
+      method: Belt.Option.getWithDefault(init.method, "GET"),
+      mode: Belt.Option.getWithDefault(init.mode, "cors"),
+      redirect: Belt.Option.getWithDefault(init.redirect, "follow"),
+      referer: Belt.Option.getWithDefault(init.referer, ""),
+      refererPolicy: Belt.Option.getWithDefault(init.refererPolicy, ""),
+      signal: Belt.Option.getWithDefault(
+        init.signal,
+        AbortController.signal(AbortController.new()),
+      ),
+      window: Belt.Option.getWithDefault(init.window, Window.window),
     }
   }
 
   @new
-  let _newFormData = (init: t<'a>, body: FormData.t) => {
+  let _newFormData = (init: t<'a, 'b>, body: FormData.t) => {
     {
       body: Some(body),
-      cache: init.cache,
-      credentials: init.credentials,
-      destination: init.destination,
+      cache: Belt.Option.getWithDefault(init.cache, ""),
+      credentials: Belt.Option.getWithDefault(init.credentials, ""),
+      destination: Belt.Option.getWithDefault(init.destination, ""),
       headers: init.headers,
-      integrity: init.integrity,
-      keepalive: init.keepalive,
-      method: init.method,
-      mode: init.mode,
-      redirect: init.redirect,
-      referer: init.referer,
-      refererPolicy: init.refererPolicy,
-      signal: init.signal,
-      window: init.window,
+      integrity: Belt.Option.getWithDefault(init.integrity, ""),
+      keepalive: Belt.Option.getWithDefault(init.keepalive, true),
+      method: Belt.Option.getWithDefault(init.method, "GET"),
+      mode: Belt.Option.getWithDefault(init.mode, "cors"),
+      redirect: Belt.Option.getWithDefault(init.redirect, "follow"),
+      referer: Belt.Option.getWithDefault(init.referer, ""),
+      refererPolicy: Belt.Option.getWithDefault(init.refererPolicy, ""),
+      signal: Belt.Option.getWithDefault(
+        init.signal,
+        AbortController.signal(AbortController.new()),
+      ),
+      window: Belt.Option.getWithDefault(init.window, Window.window),
     }
   }
 
   @new
-  let _newURLSearchParams = (init: t<'a>, body: URLSearchParams.t) => {
+  let _newURLSearchParams = (init: t<'a, 'b>, body: URLSearchParams.t) => {
     {
       body: Some(body),
-      cache: init.cache,
-      credentials: init.credentials,
-      destination: init.destination,
+      cache: Belt.Option.getWithDefault(init.cache, ""),
+      credentials: Belt.Option.getWithDefault(init.credentials, ""),
+      destination: Belt.Option.getWithDefault(init.destination, ""),
       headers: init.headers,
-      integrity: init.integrity,
-      keepalive: init.keepalive,
-      method: init.method,
-      mode: init.mode,
-      redirect: init.redirect,
-      referer: init.referer,
-      refererPolicy: init.refererPolicy,
-      signal: init.signal,
-      window: init.window,
+      integrity: Belt.Option.getWithDefault(init.integrity, ""),
+      keepalive: Belt.Option.getWithDefault(init.keepalive, true),
+      method: Belt.Option.getWithDefault(init.method, "GET"),
+      mode: Belt.Option.getWithDefault(init.mode, "cors"),
+      redirect: Belt.Option.getWithDefault(init.redirect, "follow"),
+      referer: Belt.Option.getWithDefault(init.referer, ""),
+      refererPolicy: Belt.Option.getWithDefault(init.refererPolicy, ""),
+      signal: Belt.Option.getWithDefault(
+        init.signal,
+        AbortController.signal(AbortController.new()),
+      ),
+      window: Belt.Option.getWithDefault(init.window, Window.window),
     }
   }
 
   @new
-  let _newReadableStream = (init: t<'a>, body: ReadableStream.t<Uint8Array.t>) => {
+  let _newReadableStream = (init: t<'a, 'b>, body: ReadableStream.t<Uint8Array.t>) => {
     {
       body: Some(body),
-      cache: init.cache,
-      credentials: init.credentials,
-      destination: init.destination,
+      cache: Belt.Option.getWithDefault(init.cache, ""),
+      credentials: Belt.Option.getWithDefault(init.credentials, ""),
+      destination: Belt.Option.getWithDefault(init.destination, ""),
       headers: init.headers,
-      integrity: init.integrity,
-      keepalive: init.keepalive,
-      method: init.method,
-      mode: init.mode,
-      redirect: init.redirect,
-      referer: init.referer,
-      refererPolicy: init.refererPolicy,
-      signal: init.signal,
-      window: init.window,
+      integrity: Belt.Option.getWithDefault(init.integrity, ""),
+      keepalive: Belt.Option.getWithDefault(init.keepalive, true),
+      method: Belt.Option.getWithDefault(init.method, "GET"),
+      mode: Belt.Option.getWithDefault(init.mode, "cors"),
+      redirect: Belt.Option.getWithDefault(init.redirect, "follow"),
+      referer: Belt.Option.getWithDefault(init.referer, ""),
+      refererPolicy: Belt.Option.getWithDefault(init.refererPolicy, ""),
+      signal: Belt.Option.getWithDefault(
+        init.signal,
+        AbortController.signal(AbortController.new()),
+      ),
+      window: Belt.Option.getWithDefault(init.window, Window.window),
     }
   }
 
   @new
-  let _newString = (init: t<'a>, body: string) => {
+  let _newString = (init: t<'a, 'b>, body: string) => {
     {
       body: Some(body),
-      cache: init.cache,
-      credentials: init.credentials,
-      destination: init.destination,
+      cache: Belt.Option.getWithDefault(init.cache, ""),
+      credentials: Belt.Option.getWithDefault(init.credentials, ""),
+      destination: Belt.Option.getWithDefault(init.destination, ""),
       headers: init.headers,
-      integrity: init.integrity,
-      keepalive: init.keepalive,
-      method: init.method,
-      mode: init.mode,
-      redirect: init.redirect,
-      referer: init.referer,
-      refererPolicy: init.refererPolicy,
-      signal: init.signal,
-      window: init.window,
+      integrity: Belt.Option.getWithDefault(init.integrity, ""),
+      keepalive: Belt.Option.getWithDefault(init.keepalive, true),
+      method: Belt.Option.getWithDefault(init.method, "GET"),
+      mode: Belt.Option.getWithDefault(init.mode, "cors"),
+      redirect: Belt.Option.getWithDefault(init.redirect, "follow"),
+      referer: Belt.Option.getWithDefault(init.referer, ""),
+      refererPolicy: Belt.Option.getWithDefault(init.refererPolicy, ""),
+      signal: Belt.Option.getWithDefault(
+        init.signal,
+        AbortController.signal(AbortController.new()),
+      ),
+      window: Belt.Option.getWithDefault(init.window, Window.window),
     }
   }
 }
@@ -753,7 +771,7 @@ module Request = {
   @new external _new: ('a, ~init: 'b=?) => t = "Request"
 
   @new
-  let new = (input: RequestInput.t, ~init: option<RequestInit.t<'a>>=?) => {
+  let new = (input: RequestInput.t, ~init: option<RequestInit.t<'a, 'b>>=?) => {
     switch (input, init) {
     | (String(s), Some(init)) =>
       switch init.body {
@@ -764,7 +782,7 @@ module Request = {
         _new(s, ~init=_newURLSearchParams(init, urlSearchParams))
       | Some(ReadableStream(readableStream)) =>
         _new(s, ~init=_newReadableStream(init, readableStream))
-      | Some(String(string)) => _new(s, ~init=_newString(init, string))
+      | Some(String(body)) => _new(s, ~init=_newString(init, body))
       | None => _new(s, ~init)
       }
     | (URL(url), Some(init)) =>
@@ -840,7 +858,7 @@ module FetchRequestInput = {
 
 external _fetch: ('a, ~init: 'b=?) => Promise.t<Response.t> = "fetch"
 
-let fetch = (input: FetchRequestInput.t, ~init: option<RequestInit.t<'a>>=?) => {
+let fetch = (input: FetchRequestInput.t, ~init: option<RequestInit.t<'a, 'b>>=?) => {
   switch (input, init) {
   | (URL(input), Some(init)) =>
     switch init.body {

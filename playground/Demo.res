@@ -145,11 +145,13 @@ Console.log(await result->Response.json)
 let request = Request.new(
   String("http://localhost:9007"),
   ~init={
+    body: String("hello"),
     method: "POST",
     headers: {"Content-Type": "application/json"},
   },
 )
 Console.log(request)
+Console.log(await request->Request.text)
 
 Deno.serveWithOptions({port: 9007}, ~asyncHandler=async req => {
   let headers = req->Request.headers
