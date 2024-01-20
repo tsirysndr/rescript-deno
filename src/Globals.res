@@ -562,20 +562,20 @@ module BodyInit = {
 }
 
 module ResponseInit = {
-  type t = {
+  type t<'a> = {
     status?: int,
     statusText?: string,
-    headers?: Belt.Map.String.t<string>,
+    headers?: 'a,
   }
 }
 
 module RequestInit = {
-  type t = {
+  type t<'a> = {
     body?: BodyInit.t,
     cache?: string,
     credentials?: string,
     destination?: string,
-    headers?: Belt.Map.String.t<string>,
+    headers?: 'a,
     integrity?: string,
     keepalive?: bool,
     method?: string,
@@ -587,12 +587,12 @@ module RequestInit = {
     window?: Window.t,
   }
 
-  type _t<'a> = {
+  type _t<'a, 'b> = {
     body?: 'a,
     cache?: option<string>,
     credentials?: option<string>,
     destination?: option<string>,
-    headers?: option<Belt.Map.String.t<string>>,
+    headers?: option<'b>,
     integrity?: option<string>,
     keepalive?: option<bool>,
     method?: option<string>,
@@ -605,7 +605,7 @@ module RequestInit = {
   }
 
   @new
-  let _newBlob = (init: t, body: Blob.t) => {
+  let _newBlob = (init: t<'a>, body: Blob.t) => {
     {
       body: Some(body),
       cache: init.cache,
@@ -625,7 +625,7 @@ module RequestInit = {
   }
 
   @new
-  let _newBufferSource = (init: t, body: BufferSource.t) => {
+  let _newBufferSource = (init: t<'a>, body: BufferSource.t) => {
     {
       body: Some(body),
       cache: init.cache,
@@ -645,7 +645,7 @@ module RequestInit = {
   }
 
   @new
-  let _newFormData = (init: t, body: FormData.t) => {
+  let _newFormData = (init: t<'a>, body: FormData.t) => {
     {
       body: Some(body),
       cache: init.cache,
@@ -665,7 +665,7 @@ module RequestInit = {
   }
 
   @new
-  let _newURLSearchParams = (init: t, body: URLSearchParams.t) => {
+  let _newURLSearchParams = (init: t<'a>, body: URLSearchParams.t) => {
     {
       body: Some(body),
       cache: init.cache,
@@ -685,7 +685,7 @@ module RequestInit = {
   }
 
   @new
-  let _newReadableStream = (init: t, body: ReadableStream.t<Uint8Array.t>) => {
+  let _newReadableStream = (init: t<'a>, body: ReadableStream.t<Uint8Array.t>) => {
     {
       body: Some(body),
       cache: init.cache,
@@ -705,7 +705,7 @@ module RequestInit = {
   }
 
   @new
-  let _newString = (init: t, body: string) => {
+  let _newString = (init: t<'a>, body: string) => {
     {
       body: Some(body),
       cache: init.cache,
@@ -753,7 +753,7 @@ module Request = {
   @new external _new: ('a, ~init: 'b=?) => t = "Request"
 
   @new
-  let new = (input: RequestInput.t, ~init: option<RequestInit.t>=?) => {
+  let new = (input: RequestInput.t, ~init: option<RequestInit.t<'a>>=?) => {
     switch (input, init) {
     | (String(s), Some(init)) =>
       switch init.body {
@@ -810,7 +810,7 @@ module Response = {
 
   @new external _new: ('a, ~init: 'b=?) => t = "Response"
   @new
-  let new = (body: BodyInit.t, ~init: option<ResponseInit.t>=?) => {
+  let new = (body: BodyInit.t, ~init: option<ResponseInit.t<'a>>=?) => {
     switch body {
     | Blob(blob) => _new(blob, ~init)
     | BufferSource(bufferSource) => _new(bufferSource, ~init)
@@ -840,7 +840,7 @@ module FetchRequestInput = {
 
 external _fetch: ('a, ~init: 'b=?) => Promise.t<Response.t> = "fetch"
 
-let fetch = (input: FetchRequestInput.t, ~init: option<RequestInit.t>=?) => {
+let fetch = (input: FetchRequestInput.t, ~init: option<RequestInit.t<'a>>=?) => {
   switch (input, init) {
   | (URL(input), Some(init)) =>
     switch init.body {
