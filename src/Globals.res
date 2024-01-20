@@ -275,3 +275,48 @@ module URL = {
   @send external toString: t => string = "toString"
   @send external toJSON: t => string = "toJSON"
 }
+module URLPatternInit = {
+  type t = {
+    protocol?: string,
+    username?: string,
+    password?: string,
+    hostname?: string,
+    port?: string,
+    pathname?: string,
+    search?: string,
+    hash?: string,
+    baseURL?: string,
+  }
+}
+
+module URLPatternInput = {
+  type t = String(string) | URLPatternInit(URLPatternInit.t)
+}
+
+module URLPattern = {
+  type t
+
+  @new external makeFromString: (string, ~baseURL: 'b=?) => t = "URLPattern"
+  @new external makeFromURL: (URLPatternInit.t, ~baseURL: 'b=?) => t = "URLPattern"
+
+  @new
+  let new = (input: URLPatternInput.t, ~baseURL: 'b=?) => {
+    switch input {
+    | String(s) => makeFromString(s, ~baseURL)
+    | URLPatternInit(init) => makeFromURL(init, ~baseURL)
+    }
+  }
+
+  @get external protocol: t => string = "protocol"
+  @get external username: t => string = "username"
+  @get external password: t => string = "password"
+  @get external hostname: t => string = "hostname"
+  @get external port: t => string = "port"
+  @get external pathname: t => string = "pathname"
+  @get external search: t => string = "search"
+  @get external hash: t => string = "hash"
+
+  @send external test: (t, URLPatternInput.t, ~baseURL: string=?) => bool = "test"
+  @send
+  external exec: (t, URLPatternInput.t, ~baseURL: string=?) => option<Belt.Array.t<string>> = "exec"
+}

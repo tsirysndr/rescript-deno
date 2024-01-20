@@ -82,4 +82,17 @@ Console.log(c->AbortController.signal)
 
 Console.log(URL.new("https://deno.land")->URL.toString)
 
+let pattern = URLPattern.new(String("https://deno.land"))
+
+Console.log(pattern)
+
+let pattern = URLPattern.new(
+  URLPatternInit({
+    pathname: "/x",
+    baseURL: "https://deno.land",
+  }),
+)
+
+Console.log(pattern)
+
 Deno.exit(0)
