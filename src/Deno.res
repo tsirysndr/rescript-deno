@@ -162,6 +162,36 @@ module ReadFileOptions = {
   type t = {signal?: AbortSignal.t}
 }
 
+module RemoveOptions = {
+  type t = {recursive?: bool}
+}
+
+module SymlinkOptions = {
+  type t = {\"type"?: string}
+}
+
+module WatchFsOptions = {
+  type t = {recursive?: bool}
+}
+
+module FsWatcher = {
+  type t
+
+  @get external rid: t => int = "rid"
+
+  @send external close: t => unit = "close"
+}
+
+module WriteFileOptions = {
+  type t = {
+    append?: bool,
+    create?: bool,
+    createNew?: bool,
+    mode?: int,
+    signal?: AbortSignal.t,
+  }
+}
+
 @scope("Deno") external chmod: (string, int) => Promise.t<unit> = "chmod"
 
 @scope("Deno") external chmodSync: (string, int) => unit = "chmodSync"
@@ -243,3 +273,65 @@ external readTextFile: (string, ~options: ReadFileOptions.t=?) => Promise.t<stri
 external readTextFileSync: (string, ~options: ReadFileOptions.t=?) => string = "readTextFileSync"
 
 @scope("Deno") external realPath: string => Promise.t<string> = "realPath"
+
+@scope("Deno") external realPathSync: string => string = "realPathSync"
+
+@scope("Deno") external remove: (string, ~options: RemoveOptions.t=?) => Promise.t<unit> = "remove"
+
+@scope("Deno") external removeSync: (string, ~options: RemoveOptions.t=?) => unit = "removeSync"
+
+@scope("Deno") external rename: (string, string) => Promise.t<unit> = "rename"
+
+@scope("Deno") external renameSync: (string, string) => unit = "renameSync"
+
+@scope("Deno") external stat: string => Promise.t<FileInfo.t> = "stat"
+
+@scope("Deno") external statSync: string => FileInfo.t = "statSync"
+
+@scope("Deno")
+external symlink: (string, string, ~options: SymlinkOptions.t=?) => Promise.t<unit> = "symlink"
+
+@scope("Deno")
+external symlinkSync: (string, string, ~options: SymlinkOptions.t=?) => unit = "symlinkSync"
+
+@scope("Deno") external truncate: (string, ~len: int=?) => Promise.t<unit> = "truncate"
+
+@scope("Deno") external truncateSync: (string, ~len: int=?) => unit = "truncateSync"
+
+@scope("Deno") external utime: (string, int, int) => Promise.t<unit> = "utime"
+
+@scope("Deno") external utimeDate: (string, Date.t, Date.t) => Promise.t<unit> = "utime"
+
+@scope("Deno") external utimeSync: (string, int, int) => unit = "utimeSync"
+
+@scope("Deno") external utimeDateSync: (string, Date.t, Date.t) => unit = "utimeSync"
+
+@scope("Deno") external watchFs: (string, ~options: WatchFsOptions.t=?) => FsWatcher.t = "watchFs"
+
+@scope("Deno")
+external writeFile: (string, Uint8Array.t, ~options: WriteFileOptions.t=?) => Promise.t<unit> =
+  "writeFile"
+
+@scope("Deno")
+external writeFileSync: (string, Uint8Array.t, ~options: WriteFileOptions.t=?) => unit =
+  "writeFileSync"
+
+module Data = {
+  type t =
+    | String(string)
+    | ReadableStream(ReadableStream.t<string>)
+}
+
+@scope("Deno")
+external _writeTextFile: (string, 'a, ~options: 'b=?) => Promise.t<unit> = "writeTextFile"
+
+@scope("Deno")
+external _writeTextFileSync: (string, 'a, ~options: 'b=?) => unit = "writeTextFileSync"
+
+@scope("Deno")
+let writeTextFile = (path, data, ~options: 'b=?) => {
+  switch data {
+  | Data.String(data) => _writeTextFile(path, data, ~options)
+  | Data.ReadableStream(data) => _writeTextFile(path, data, ~options)
+  }
+}

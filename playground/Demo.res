@@ -122,6 +122,7 @@ Console.log(file)
 
 await Deno.mkdir("hello/world", ~options={recursive: true})
 
+await Deno.writeTextFile("hello.txt", Deno.Data.String("hello"))
 */
 
 Deno.exit(0)

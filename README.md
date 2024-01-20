@@ -48,120 +48,35 @@ See [playground](playground) directory in this repo.
 
 There's still a good amount of bindings missing. Here's what's currently available:
 
-### Broadcast Channel
-
-TODO
-
-### Cache API
-
-TODO
-
-### Compression Streams API
-
-TODO
-
-### DOM APIs
-
-TODO
-
-### DOM Events
-
-TODO
-
-### Encoding API
-
-TODO
-
-### Errors
-
-TODO
-
-### ES Modules
-
-TODO
-
-### Fetch API
-
-TODO
-
-### File System
-
-- [x] Deno.chmod
-- [x] Deno.chmodSync
-- [x] Deno.chown
-- [x] Deno.chownSync
-- [x] Deno.copyFile
-- [x] Deno.copyFileSync
-- [x] Deno.create
-- [x] Deno.createSync
-- [x] Deno.fstat
-- [x] Deno.fstatSync
-- [x] Deno.ftruncate
-- [x] Deno.ftruncateSync
-- [x] Deno.futime
-- [x] Deno.link
-- [x] Deno.linkSync
-- [x] Deno.lstat
-- [x] Deno.lstatSync
-- [x] Deno.makeTempDir
-- [x] Deno.makeTempDirSync
-- [x] Deno.makeTempFile
-- [x] Deno.makeTempFileSync
-- [x] Deno.mkdir
-- [x] Deno.mkdirSync
-- [x] Deno.open
-- [x] Deno.openSync
-- [x] Deno.readDir
-- [x] Deno.readDirSync
-- [x] Deno.readFile
-- [x] Deno.readFileSync
-
-### HTTP Server
-
-TODO
-
-### I/O
-
-TODO
-
-### Network
-
-TODO
-
-### Observability
-
-TODO
-
-### Performance
-
-TODO
-
-### Permissions
-
-TODO
-
-### Runtime Environment
-
-- [x] Deno.version
-- [x] Deno.pid
-- [x] Deno.ppid
-- [x] Deno.noColor
-- [x] Deno.args
-- [x] Deno.mainModule
-- [x] Deno.build 
-- [x] Deno.env
-- [x] Deno.exit
-
-
-### Scheduling
-
-TODO
-
-### Streams API
-
-TODO
-
-### Sub Process
+- [ ] Broadcast Channel
+- [ ] Cache API
+- [ ] Compression Streams API
+- [ ] DOM APIs
+- [ ] DOM Events
+- [ ] Encoding API
+- [ ] Errors
+- [ ] ES Modules
+- [ ] Fetch API
+- [x] File System
+- [ ] HTTP Server
+- [ ] I/O
+- [ ] Network
+- [ ] Observability
+- [ ] Performance
+- [ ] Permissions
+- [ ] Runtime Environment
+  - [x] Deno.version
+  - [x] Deno.pid
+  - [x] Deno.ppid
+  - [x] Deno.noColor
+  - [x] Deno.args
+  - [x] Deno.mainModule
+  - [x] Deno.build
+  - [x] Deno.env
+  - [x] Deno.exit
+- [ ] Scheduling
+- [ ] Streams API
+- [ ] Sub Process
 
 TODO
 
