@@ -59,14 +59,33 @@ See [playground](playground) directory in this repo for more examples.
 There's still a good amount of bindings missing. Here's what's currently available:
 
 - [ ] Broadcast Channel
+  - [ ] BroadcastChannel
 - [ ] Cache API
+  - [ ] Cache
+  - [ ] CacheStorage
+  - [ ] caches
 - [ ] Compression Streams API
+  - [ ] CompressionStream
+  - [ ] DecompressionStream
 - [ ] DOM APIs
 - [ ] DOM Events
 - [ ] Encoding API
+  - [ ] TextDecoder
+  - [x] TextEncoder
+  - [x] atob
+  - [x] btoa
 - [ ] Errors
 - [ ] ES Modules
 - [ ] Fetch API
+  - [x] Body
+  - [ ] EventSource
+  - [x] FormData
+  - [x] Headers
+  - [ ] Request
+  - [x] Response
+  - [x] ResponseInit
+  - [x] BodyInit
+  - [ ] fetch
 - [x] File System
 - [ ] HTTP Server
   - [x] Deno.serve
@@ -89,15 +108,31 @@ There's still a good amount of bindings missing. Here's what's currently availab
 - [ ] Scheduling
 - [ ] Streams API
 - [ ] Sub Process
+  - [ ] Deno.ChildProcess
+  - [ ] Deno.Command
+  - [ ] Deno.Process
+  - [ ] Deno.kill
+  - [ ] Deno.run 
 - [ ] Testing
+  - [ ] Deno.test
+  - [ ] Deno.bench 
 - [ ] Timers
 - [ ] Typed Arrays
 - [ ] Web APIs
 - [ ] Web Crypto API
 - [ ] Web File API
+  - [x] Blob
+  - [x] File
+  - [ ] FileReader
 - [ ] Web Sockets
+  - [ ] CloseEvent
+  - [ ] WebSocket
 - [ ] Web Storage API
+  - [ ] Storage
+  - [ ] localStorage
+  - [ ] sessionStorage
 - [ ] Web Workers
+  - [ ] Worker
 - [ ] WebAssembly
 - [ ] WebGPU
 
