@@ -105,4 +105,14 @@ Console.log(btoa("hello"))
 
 Console.log(atob("aGVsbG8gd29ybGQ="))
 
+alert("hello")
+
+let res = prompt("Are you sure?")
+
+Console.log(res)
+
+let res = confirm("Are you sure?")
+
+Console.log(res)
+
 Deno.exit(0)

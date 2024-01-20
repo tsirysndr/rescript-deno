@@ -2,6 +2,12 @@ external atob: string => string = "atob"
 
 external btoa: string => string = "btoa"
 
+external alert: string => unit = "alert"
+
+external confirm: string => bool = "confirm"
+
+external prompt: string => option<string> = "prompt"
+
 module EventTarget = {
   type t
   @send
@@ -323,4 +329,45 @@ module URLPattern = {
   @send external test: (t, URLPatternInput.t, ~baseURL: string=?) => bool = "test"
   @send
   external exec: (t, URLPatternInput.t, ~baseURL: string=?) => option<Belt.Array.t<string>> = "exec"
+}
+
+module ErrorEventInit = {
+  type t<'a> = {
+    message?: string,
+    filename?: string,
+    lineno?: int,
+    colno?: int,
+    error?: 'a,
+  }
+}
+
+module ErrorEvent = {
+  type t
+  @get external message: t => string = "message"
+  @get external filename: t => string = "filename"
+  @get external lineno: t => int = "lineno"
+  @get external colno: t => int = "colno"
+  @get external error: t => 'a = "error"
+  @new external new: (string, ~eventInitDict: ErrorEventInit.t<'a>=?) => t = "ErrorEvent"
+}
+
+module Window = {
+  type t
+
+  @get external window: t => t = "window"
+  @get external self: t => t = "self"
+  @get external onerror: t => (t, ErrorEvent.t) => 'a = "onerror"
+  @get external onload: t => (t, Event.t) => 'a = "onload"
+  @get external onbeforeunload: t => (t, Event.t) => 'a = "onbeforeunload"
+  @get external onunload: t => (t, Event.t) => 'a = "onunload"
+  @get external close: t => t => unit = "close"
+  @get external closed: t => bool = "closed"
+  @get external alert: t => (~message: string=?) => unit = "alert"
+  @get external confirm: t => (~message: string=?) => bool = "confirm"
+  @get
+  external prompt: t => (~message: string=?, ~defaultValue: string=?) => option<string> = "prompt"
+  @get external name: t => string = "name"
+
+  @send external addEventListener: (t, string, 'a, ~options: bool=?) => unit = "addEventListener"
+  @send external removeEventListener: (t, string, 'a, bool) => unit = "removeEventListener"
 }
