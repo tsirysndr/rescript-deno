@@ -190,6 +190,82 @@ module WriteFileOptions = {
     mode?: int,
     signal?: AbortSignal.t,
   }
+
+  @get external append: t => bool = "append"
+  @get external create: t => bool = "create"
+  @get external createNew: t => bool = "createNew"
+  @get external mode: t => int = "mode"
+  @get external signal: t => AbortSignal.t = "signal"
+}
+
+module HttpServer = {
+  type t
+
+  @get external finished: t => Promise.t<unit> = "finished"
+
+  @send external ref: t => unit = "ref"
+
+  @send external unref: t => unit = "unref"
+
+  @send external shutdown: t => Promise.t<unit> = "shutdown"
+}
+
+module NetAddr = {
+  type t = {
+    hostname: string,
+    port: int,
+    transport: string,
+  }
+}
+
+module ServeHandlerInfo = {
+  type t
+  @get external remoteAddr: t => NetAddr.t = "remoteAddr"
+}
+
+module ServeHandler = {
+  type t = Request.t => Response.t
+}
+
+module ServeHandlerAsync = {
+  type t = Request.t => Promise.t<Response.t>
+}
+
+module ServeUnixOptions = {
+  type callback<'a> =
+    | Fn('a => Response.t)
+    | AsyncFn('a => Promise.t<Response.t>)
+
+  type t<'a, 'b> = {
+    path: string,
+    signal?: AbortSignal.t,
+    onError?: callback<'a>,
+    onListen?: 'b => unit,
+  }
+}
+
+module ServeOptions = {
+  type t<'a, 'b> = {
+    port?: int,
+    hostname?: string,
+    signal?: AbortSignal.t,
+    reusePort?: bool,
+    onError?: 'a => unit,
+    onListen?: 'b => unit,
+  }
+}
+
+module ServeTlsOptions = {
+  type t<'a, 'b> = {
+    cert: string,
+    key: string,
+    port?: int,
+    hostname?: string,
+    signal?: AbortSignal.t,
+    reusePort?: bool,
+    onError?: 'a => unit,
+    onListen?: 'b => unit,
+  }
 }
 
 @scope("Deno") external chmod: (string, int) => Promise.t<unit> = "chmod"
@@ -323,15 +399,74 @@ module Data = {
 }
 
 @scope("Deno")
-external _writeTextFile: (string, 'a, ~options: 'b=?) => Promise.t<unit> = "writeTextFile"
+external _writeTextFile: (string, 'a, ~options: option<WriteFileOptions.t>=?) => Promise.t<unit> =
+  "writeTextFile"
 
 @scope("Deno")
-external _writeTextFileSync: (string, 'a, ~options: 'b=?) => unit = "writeTextFileSync"
+external _writeTextFileSync: (string, 'a, ~options: option<WriteFileOptions.t>=?) => unit =
+  "writeTextFileSync"
 
 @scope("Deno")
-let writeTextFile = (path, data, ~options: 'b=?) => {
+let writeTextFile = (path, data, ~options: option<WriteFileOptions.t>=?) => {
   switch data {
   | Data.String(data) => _writeTextFile(path, data, ~options)
   | Data.ReadableStream(data) => _writeTextFile(path, data, ~options)
+  }
+}
+
+@scope("Deno")
+external _serve: (~handler: 'a) => HttpServer.t = "serve"
+
+@scope("Deno")
+external _serveWithOptions: (~options: 'a, ~handler: 'b=?) => HttpServer.t = "serve"
+
+@scope("Deno")
+let serve = (~handler: option<ServeHandler.t>=?, ~asyncHandler: option<ServeHandlerAsync.t>=?) => {
+  switch (handler, asyncHandler) {
+  | (Some(handler), None) => _serve(~handler)
+  | (None, Some(handler)) => _serve(~handler)
+  | _ => failwith("serve: invalid arguments")
+  }
+}
+
+@scope("Deno")
+let serveWithOptions = (
+  options: ServeOptions.t<'a, 'b>,
+  ~handler: option<ServeHandler.t>=?,
+  ~asyncHandler: option<ServeHandlerAsync.t>=?,
+) => {
+  switch (handler, asyncHandler) {
+  | (None, None) => _serveWithOptions(~options)
+  | (Some(handler), None) => _serveWithOptions(~options, ~handler)
+  | (None, Some(handler)) => _serve(~handler)
+  | _ => failwith("serve: invalid arguments")
+  }
+}
+
+@scope("Deno")
+let serveWithUnixOptions = (
+  options: ServeUnixOptions.t<'a, 'b>,
+  ~handler: option<ServeHandler.t>=?,
+  ~asyncHandler: option<ServeHandlerAsync.t>=?,
+) => {
+  switch (handler, asyncHandler) {
+  | (None, None) => _serveWithOptions(~options)
+  | (Some(handler), None) => _serveWithOptions(~options, ~handler)
+  | (None, Some(handler)) => _serve(~handler)
+  | _ => failwith("serve: invalid arguments")
+  }
+}
+
+@scope("Deno")
+let serveWithTlsOptions = (
+  options: ServeTlsOptions.t<'a, 'b>,
+  ~handler: option<ServeHandler.t>=?,
+  ~asyncHandler: option<ServeHandlerAsync.t>=?,
+) => {
+  switch (handler, asyncHandler) {
+  | (None, None) => _serveWithOptions(~options)
+  | (Some(handler), None) => _serveWithOptions(~options, ~handler)
+  | (None, Some(handler)) => _serve(~handler)
+  | _ => failwith("serve: invalid arguments")
   }
 }

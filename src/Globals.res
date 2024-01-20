@@ -310,7 +310,7 @@ module URLPattern = {
   @new external makeFromURL: (URLPatternInit.t, ~baseURL: 'b=?) => t = "URLPattern"
 
   @new
-  let new = (input: URLPatternInput.t, ~baseURL: 'b=?) => {
+  let new = (input: URLPatternInput.t, ~baseURL: option<string>=?) => {
     switch input {
     | String(s) => makeFromString(s, ~baseURL)
     | URLPatternInit(init) => makeFromURL(init, ~baseURL)
@@ -456,4 +456,145 @@ module Transform = {
     writable: WritableStream.t<'a>,
     readable: ReadableStream.t<'a>,
   }
+}
+
+module Headers = {
+  type t
+
+  @send external append: (t, string, string) => unit = "append"
+  @send external delete: (t, string) => unit = "delete"
+  @send external get: (t, string) => option<string> = "get"
+  @send external has: (t, string) => bool = "has"
+  @send external set: (t, string, string) => unit = "set"
+  @send external getSetCookie: t => Belt.Array.t<string> = "getSetCookie"
+}
+
+module Blob = {
+  type t
+
+  @get external size: t => int = "size"
+
+  @get external \"type": t => string = "type"
+
+  @send external arrayBuffer: t => Promise.t<ArrayBuffer.t> = "arrayBuffer"
+
+  @send external slice: (t, ~start: int=?, ~end: int=?, ~contentType: string=?) => t = "slice"
+
+  @send external stream: t => ReadableStream.t<Uint8Array.t> = "stream"
+
+  @send external text: t => Promise.t<string> = "text"
+}
+
+module File = {
+  type t
+
+  @get external lastModified: t => int = "lastModified"
+
+  @get external name: t => string = "name"
+
+  @get external size: t => int = "size"
+
+  @get external \"type": t => string = "type"
+
+  @send external arrayBuffer: t => Promise.t<ArrayBuffer.t> = "arrayBuffer"
+
+  @send external slice: (t, ~start: int=?, ~end: int=?, ~contentType: string=?) => t = "slice"
+
+  @send external stream: t => ReadableStream.t<Uint8Array.t> = "stream"
+
+  @send external text: t => Promise.t<string> = "text"
+}
+
+module BufferSource = {
+  type t = ArrayBuffer.t
+}
+
+module FormDataEntryValue = {
+  type t =
+    | File(File.t)
+    | Blob(Blob.t)
+    | String(string)
+}
+
+module FormData = {
+  type t
+
+  @new external new: unit => t = "FormData"
+
+  @send external append: (t, string, FormDataEntryValue.t, ~fileName: string=?) => unit = "append"
+
+  @send external delete: (t, string) => unit = "delete"
+
+  @send external get: (t, string) => option<FormDataEntryValue.t> = "get"
+
+  @send external getAll: (t, string) => Belt.Array.t<FormDataEntryValue.t> = "getAll"
+
+  @send external has: (t, string) => bool = "has"
+
+  @send external set: (t, string, string, ~fileName: string=?) => unit = "set"
+}
+
+module Body = {
+  type t
+
+  @get external body: t => option<ReadableStream.t<Uint8Array.t>> = "body"
+
+  @get external bodyUsed: t => bool = "bodyUsed"
+
+  @send external arrayBuffer: t => Promise.t<ArrayBuffer.t> = "arrayBuffer"
+
+  @send external blob: t => Promise.t<Blob.t> = "blob"
+
+  @send external formData: t => Promise.t<FormData.t> = "formData"
+
+  @send external json: t => Promise.t<'a> = "json"
+
+  @send external text: t => Promise.t<string> = "text"
+}
+module BodyInit = {
+  type t =
+    | Blob(Blob.t)
+    | BufferSource(BufferSource.t)
+    | FormData(FormData.t)
+    | URLSearchParams(URLSearchParams.t)
+    | ReadableStream(ReadableStream.t<Uint8Array.t>)
+    | String(string)
+}
+
+module ResponseInit = {
+  type t = {
+    status?: int,
+    statusText?: string,
+    headers?: Belt.Map.String.t<string>,
+  }
+}
+
+module Request = {
+  type t
+}
+
+module Response = {
+  type t
+
+  @get external headers: t => Headers.t = "headers"
+  @get external ok: t => bool = "ok"
+  @get external redirected: t => bool = "redirected"
+  @get external status: t => int = "status"
+  @get external statusText: t => string = "statusText"
+  @get external \"type": t => string = "type"
+  @get external url: t => string = "url"
+
+  @new external _new: ('a, ~init: option<ResponseInit.t>=?) => t = "Response"
+  @new
+  let new = (body: BodyInit.t, ~init: option<ResponseInit.t>=?) => {
+    switch body {
+    | Blob(blob) => _new(blob, ~init)
+    | BufferSource(bufferSource) => _new(bufferSource, ~init)
+    | FormData(formData) => _new(formData, ~init)
+    | URLSearchParams(urlSearchParams) => _new(urlSearchParams, ~init)
+    | ReadableStream(readableStream) => _new(readableStream, ~init)
+    | String(string) => _new(string, ~init)
+    }
+  }
+  @send external clone: t => t = "clone"
 }

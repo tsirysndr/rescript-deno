@@ -44,7 +44,15 @@ This will make all of Deno available to you without needing to dip into the `Res
 
 ## 🧑‍🔬 Examples
 
-See [playground](playground) directory in this repo.
+A Simple HTTP Server:
+
+```rescript
+Deno.serveWithOptions({port: 8007}, ~handler=req => {
+  Response.new(String("Hello, world!"))
+})->ignore
+```
+
+See [playground](playground) directory in this repo for more examples.
 
 ## 📑 Current Coverage
 
@@ -61,6 +69,8 @@ There's still a good amount of bindings missing. Here's what's currently availab
 - [ ] Fetch API
 - [x] File System
 - [ ] HTTP Server
+  - [x] Deno.serve
+  - [ ] Deno.serveHttp
 - [ ] I/O
 - [ ] Network
 - [ ] Observability

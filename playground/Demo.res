@@ -122,7 +122,21 @@ Console.log(file)
 
 await Deno.mkdir("hello/world", ~options={recursive: true})
 
-await Deno.writeTextFile("hello.txt", Deno.Data.String("hello"))
+await Deno.writeTextFile("hello.txt", Deno.Data.String("hello"), ~options={create: true})
 */
 
-Deno.exit(0)
+/*
+Deno.serveWithUnixOptions({path: "/tmp/deno.sock"}, ~handler=req => {
+  Response.new(String("Hello, world!"))
+})->ignore
+*/
+
+/*
+Deno.serve(~handler=req => {
+  Response.new(String("Hello, world!"))
+})->ignore
+*/
+
+Deno.serveWithOptions({port: 9007}, ~handler=req => {
+  Response.new(String("Hello, world!"))
+})->ignore
