@@ -105,6 +105,7 @@ Console.log(btoa("hello"))
 
 Console.log(atob("aGVsbG8gd29ybGQ="))
 
+/*
 alert("hello")
 
 let res = prompt("Are you sure?")
@@ -114,5 +115,13 @@ Console.log(res)
 let res = confirm("Are you sure?")
 
 Console.log(res)
+
+let file = await Deno.create("hello.txt")
+
+Console.log(file)
+
+await Deno.mkdir("hello/world", ~options={recursive: true})
+
+*/
 
 Deno.exit(0)

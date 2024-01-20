@@ -371,3 +371,89 @@ module Window = {
   @send external addEventListener: (t, string, 'a, ~options: bool=?) => unit = "addEventListener"
   @send external removeEventListener: (t, string, 'a, bool) => unit = "removeEventListener"
 }
+
+module ReadableStreamBYOBReaderReadOptions = {
+  type t = {min?: int}
+}
+
+module ReadableStreamBYOBReadResult = {
+  type t<'a>
+}
+
+module ReadableStreamBYOBReader = {
+  type t
+
+  @get external closed: t => Promise.t<unit> = "closed"
+
+  @send external cancel: (t, ~reason: 'a=?) => Promise.t<unit> = "cancel"
+
+  @send
+  external read: (
+    t,
+    'a,
+    ~options: ReadableStreamBYOBReaderReadOptions.t=?,
+  ) => Promise.t<ReadableStreamBYOBReadResult.t<'b>> = "read"
+
+  @send external releaseLock: t => unit = "releaseLock"
+}
+
+module WritableStreamDefaultWriter = {
+  type t<'a>
+
+  @get external closed: t<'a> => Promise.t<unit> = "closed"
+
+  @get external desiredSize: t<'a> => int = "desiredSize"
+
+  @get external ready: t<'a> => Promise.t<unit> = "ready"
+
+  @send external abort: (t<'a>, ~reason: 'b=?) => Promise.t<unit> = "abort"
+
+  @send external close: t<'a> => Promise.t<unit> = "close"
+
+  @send external releaseLock: t<'a> => unit = "releaseLock"
+
+  @send external write: (t<'a>, 'a) => Promise.t<unit> = "write"
+}
+
+module WritableStream = {
+  type t<'a>
+
+  @get external locked: t<'a> => bool = "locked"
+
+  @send external abort: (t<'a>, ~reason: 'b=?) => Promise.t<unit> = "abort"
+
+  @send external close: t<'a> => Promise.t<unit> = "close"
+
+  @send external getWriter: t<'a> => WritableStreamDefaultWriter.t<'a> = "getWriter"
+}
+
+module PipeOptions = {
+  type t = {preventClose?: bool, preventAbort?: bool, preventCancel?: bool, signal?: AbortSignal.t}
+}
+
+module ReadableStream = {
+  type t<'a>
+
+  type options = {mode?: string}
+
+  @get external locked: t<'a> => bool = "locked"
+
+  @send external cancel: (t<'a>, ~reason: 'b=?) => Promise.t<unit> = "cancel"
+
+  @send external getReader: (t<'a>, options) => ReadableStreamBYOBReader.t = "getReader"
+
+  @send external pipeThrougth: ('a, ~options: PipeOptions.t=?) => t<'b> = "pipeThrougth"
+
+  @send external pipeTo: ('a, ~options: PipeOptions.t=?) => Promise.t<unit> = "pipeTo"
+
+  @send external tee: t<'a> => Belt.Array.t<t<'b>> = "tee"
+
+  @send external values: (t<'a>, ~options: 'b=?) => 'c = "values"
+}
+
+module Transform = {
+  type t<'a> = {
+    writable: WritableStream.t<'a>,
+    readable: ReadableStream.t<'a>,
+  }
+}

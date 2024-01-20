@@ -6,7 +6,7 @@ Use [Deno](https://deno.com/) with [ReScript](https://rescript-lang.org/).
 >
 > Project Status: 🐲 Unstable, alpha-ish quality.
 
-🚚 Install
+## 🚚 Install
 
 You need to be on at least a recent RC of ReScript v11.
 
@@ -39,3 +39,61 @@ Include them in your `rescript.json`:
 This might be a matter of taste, but I recommend opening it to get the best experience.
 
 This will make all of Deno available to you without needing to dip into the `RescriptDeno` module explicitly.
+
+## 🧑‍🔬 Examples
+
+See [playground](playground) directory in this repo.
+
+## 📦 Current Coverage
+
+There's still a good amount of bindings missing. Here's what's currently available:
+
+### Deno
+
+- [x] Deno.version
+- [x] Deno.pid
+- [x] Deno.ppid
+- [x] Deno.noColor
+- [x] Deno.args
+- [x] Deno.mainModule
+- [x] Deno.build 
+- [x] Deno.env
+- [x] Deno.exit
+
+### File System
+
+- [x] Deno.chmod
+- [x] Deno.chmodSync
+- [x] Deno.chown
+- [x] Deno.chownSync
+- [x] Deno.copyFile
+- [x] Deno.copyFileSync
+- [x] Deno.create
+- [x] Deno.createSync
+- [x] Deno.fstat
+- [x] Deno.fstatSync
+- [x] Deno.ftruncate
+- [x] Deno.ftruncateSync
+- [x] Deno.futime
+- [x] Deno.link
+- [x] Deno.linkSync
+- [x] Deno.lstat
+- [x] Deno.lstatSync
+- [x] Deno.makeTempDir
+- [x] Deno.makeTempDirSync
+- [x] Deno.makeTempFile
+- [x] Deno.makeTempFileSync
+- [x] Deno.mkdir
+- [x] Deno.mkdirSync
+- [x] Deno.open
+- [x] Deno.openSync
+- [x] Deno.readDir
+- [x] Deno.readDirSync
+- [x] Deno.readFile
+- [x] Deno.readFileSync
+
+
+## 🤝 Contributing
+
+Contributions, issues and feature requests are welcome!
+See [CONTRIBUTING.md](CONTRIBUTING.md) for more info.
