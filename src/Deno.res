@@ -231,3 +231,15 @@ external readFile: (string, ~options: ReadFileOptions.t=?) => Promise.t<Uint8Arr
 
 @scope("Deno")
 external readFileSync: (string, ~options: ReadFileOptions.t=?) => Uint8Array.t = "readFileSync"
+
+@scope("Deno") external readLink: string => Promise.t<string> = "readLink"
+
+@scope("Deno") external readLinkSync: string => string = "readLinkSync"
+
+@scope("Deno")
+external readTextFile: (string, ~options: ReadFileOptions.t=?) => Promise.t<string> = "readTextFile"
+
+@scope("Deno")
+external readTextFileSync: (string, ~options: ReadFileOptions.t=?) => string = "readTextFileSync"
+
+@scope("Deno") external realPath: string => Promise.t<string> = "realPath"

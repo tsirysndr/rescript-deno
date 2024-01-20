@@ -44,21 +44,45 @@ This will make all of Deno available to you without needing to dip into the `Res
 
 See [playground](playground) directory in this repo.
 
-## 📦 Current Coverage
+## 📑 Current Coverage
 
 There's still a good amount of bindings missing. Here's what's currently available:
 
-### Deno
+### Broadcast Channel
 
-- [x] Deno.version
-- [x] Deno.pid
-- [x] Deno.ppid
-- [x] Deno.noColor
-- [x] Deno.args
-- [x] Deno.mainModule
-- [x] Deno.build 
-- [x] Deno.env
-- [x] Deno.exit
+TODO
+
+### Cache API
+
+TODO
+
+### Compression Streams API
+
+TODO
+
+### DOM APIs
+
+TODO
+
+### DOM Events
+
+TODO
+
+### Encoding API
+
+TODO
+
+### Errors
+
+TODO
+
+### ES Modules
+
+TODO
+
+### Fetch API
+
+TODO
 
 ### File System
 
@@ -91,6 +115,99 @@ There's still a good amount of bindings missing. Here's what's currently availab
 - [x] Deno.readDirSync
 - [x] Deno.readFile
 - [x] Deno.readFileSync
+
+### HTTP Server
+
+TODO
+
+### I/O
+
+TODO
+
+### Network
+
+TODO
+
+### Observability
+
+TODO
+
+### Performace
+
+TODO
+
+### Permissions
+
+TODO
+
+### Runtime Environment
+
+- [x] Deno.version
+- [x] Deno.pid
+- [x] Deno.ppid
+- [x] Deno.noColor
+- [x] Deno.args
+- [x] Deno.mainModule
+- [x] Deno.build 
+- [x] Deno.env
+- [x] Deno.exit
+
+
+### Scheduling
+
+TODO
+
+### Streams API
+
+TODO
+
+### Sub Process
+
+TODO
+
+### Testing
+
+TODO
+
+### Timers
+
+TODO
+
+### Typed Arrays
+
+TODO
+
+### Web APIs
+
+TODO
+
+### Web Crypto API
+
+TODO
+
+### Web File API
+
+TODO
+
+### Web Sockets
+
+TODO
+
+### Web Storage API
+
+TODO
+
+### Web Workers
+
+TODO
+
+### WebAssembly
+
+TODO
+
+### WebGPU
+
+TODO
 
 
 ## 🤝 Contributing
