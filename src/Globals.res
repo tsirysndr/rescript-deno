@@ -469,12 +469,40 @@ module Headers = {
   @send external getSetCookie: t => Belt.Array.t<string> = "getSetCookie"
 }
 
+module BufferSource = {
+  type t = ArrayBuffer.t
+}
+
+module BlobParts = {
+  type t =
+    | BufferSources(Belt.Array.t<BufferSource.t>)
+    | Strings(Belt.Array.t<string>)
+}
+
+module BlobPropertyBag = {
+  type t = {
+    \"type"?: string,
+    endings?: string,
+  }
+}
 module Blob = {
   type t
 
   @get external size: t => int = "size"
 
   @get external \"type": t => string = "type"
+
+  @new external _new: ('a, 'b) => t = "Blob"
+
+  @new
+  let new = (parts: BlobParts.t, ~options: option<BlobPropertyBag.t>=?) => {
+    switch (parts, options) {
+    | (BufferSources(bufferSources), Some(options)) => _new(bufferSources, options)
+    | (BufferSources(bufferSources), None) => _new(bufferSources, None)
+    | (Strings(strings), Some(options)) => _new(strings, options)
+    | (Strings(strings), None) => _new(strings, None)
+    }
+  }
 
   @send external arrayBuffer: t => Promise.t<ArrayBuffer.t> = "arrayBuffer"
 
@@ -505,10 +533,6 @@ module File = {
   @send external text: t => Promise.t<string> = "text"
 }
 
-module BufferSource = {
-  type t = ArrayBuffer.t
-}
-
 module FormDataEntryValue = {
   type t =
     | File(File.t)
@@ -521,7 +545,23 @@ module FormData = {
 
   @new external new: unit => t = "FormData"
 
-  @send external append: (t, string, FormDataEntryValue.t, ~fileName: string=?) => unit = "append"
+  @send external _append: (t, string, 'a, 'b) => unit = "append"
+
+  let append: (t, string, FormDataEntryValue.t, ~fileName: string=?) => unit = (
+    t,
+    name,
+    value,
+    ~fileName: option<string>=?,
+  ) => {
+    switch (value, fileName) {
+    | (File(file), Some(fileName)) => _append(t, name, file, fileName)
+    | (Blob(blob), Some(fileName)) => _append(t, name, blob, fileName)
+    | (String(string), Some(fileName)) => _append(t, name, string, fileName)
+    | (File(file), None) => _append(t, name, file, None)
+    | (Blob(blob), None) => _append(t, name, blob, None)
+    | (String(string), None) => _append(t, name, string, None)
+    }
+  }
 
   @send external delete: (t, string) => unit = "delete"
 

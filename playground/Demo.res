@@ -142,16 +142,19 @@ let result = await fetch(String("https://rickandmortyapi.com/api/character"))
 Console.log(await result->Response.json)
 */
 
+let data = FormData.new()
+data->FormData.append("foo", String("bar"))
+
 let request = Request.new(
   String("http://localhost:9007"),
   ~init={
-    body: String("hello"),
+    body: FormData(data),
     method: "POST",
-    headers: {"Content-Type": "application/json"},
+    // headers: {"Content-Type": "application/json"},
   },
 )
 Console.log(request)
-Console.log(await request->Request.text)
+Console.log(await request->Request.formData)
 
 Deno.serveWithOptions({port: 9007}, ~asyncHandler=async req => {
   let headers = req->Request.headers
