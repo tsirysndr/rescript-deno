@@ -489,13 +489,43 @@ module Listener = {
 
   @get external rid: t => int = "rid"
 
-  @send external accept: unit => Promise.t<'a> = "accept"
+  @send external accept: t => Promise.t<'a> = "accept"
 
-  @send external close: unit => Promise.t<unit> = "close"
+  @send external close: t => Promise.t<unit> = "close"
 
-  @send external ref: unit => unit = "ref"
+  @send external ref: t => unit = "ref"
 
   @send external unref: unit => unit = "unref"
 }
 
 @scope("Deno") external listen: TcpListenOptions.t => Listener.t = "listen"
+
+module ConnectOptions = {
+  type t = {
+    port: int,
+    hostname?: string,
+    transport?: string,
+  }
+}
+
+module TcpConn = {
+  type t
+
+  @get external localAddr: t => NetAddr.t = "localAddr"
+
+  @get external remoteAddr: t => NetAddr.t = "remoteAddr"
+
+  @get external rid: t => int = "rid"
+
+  @get external readable: t => ReadableStream.t<Uint8Array.t> = "readable"
+
+  @get external writable: t => WritableStream.t<Uint8Array.t> = "writable"
+
+  @send external closeWrite: t => Promise.t<unit> = "close"
+  @send external ref: t => unit = "ref"
+  @send external unref: t => unit = "unerf"
+  @send external setNoDelay: (t, bool) => unit = "setNoDelay"
+  @send external setKeepAlive: (t, bool) => unit = "setKeepAlive"
+}
+
+@scope("Deno") external connect: ConnectOptions.t => Promise.t<TcpConn.t> = "connect"
