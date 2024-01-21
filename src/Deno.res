@@ -268,6 +268,151 @@ module ServeTlsOptions = {
   }
 }
 
+module ListenOptions = {
+  type t = {
+    hostname?: string,
+    port?: int,
+  }
+}
+
+module TcpListenOptions = {
+  type t = {...ListenOptions.t, reusePort?: bool, transport?: string}
+}
+
+module ListenTlsOptions = {
+  type t = {
+    ...TcpListenOptions.t,
+    key?: string,
+    cert?: string,
+    certFile?: string,
+    keyFile?: string,
+    alpnProtocols?: Belt.Array.t<string>,
+  }
+}
+
+module Listener = {
+  type t<'a>
+
+  @get external addr: t<'a> => NetAddr.t = "addr"
+
+  @get external rid: t<'a> => int = "rid"
+
+  @send external accept: t<'a> => Promise.t<'a> = "accept"
+
+  @send external close: t<'a> => Promise.t<unit> = "close"
+
+  @send external ref: t<'a> => unit = "ref"
+
+  @send external unref: t<'a> => unit = "unref"
+}
+
+module ConnectOptions = {
+  type t = {
+    port: int,
+    hostname?: string,
+    transport?: string,
+  }
+}
+
+module TcpConn = {
+  type t
+
+  @get external localAddr: t => NetAddr.t = "localAddr"
+
+  @get external remoteAddr: t => NetAddr.t = "remoteAddr"
+
+  @get external rid: t => int = "rid"
+
+  @get external readable: t => ReadableStream.t<Uint8Array.t> = "readable"
+
+  @get external writable: t => WritableStream.t<Uint8Array.t> = "writable"
+
+  @send external closeWrite: t => Promise.t<unit> = "close"
+  @send external ref: t => unit = "ref"
+  @send external unref: t => unit = "unerf"
+  @send external setNoDelay: (t, bool) => unit = "setNoDelay"
+  @send external setKeepAlive: (t, bool) => unit = "setKeepAlive"
+}
+
+module Conn = {
+  type t
+
+  @get external localAddr: t => NetAddr.t = "localAddr"
+  @get external remoteAddr: t => NetAddr.t = "remoteAddr"
+  @get external rid: t => int = "rid"
+  @get external readable: t => ReadableStream.t<Uint8Array.t> = "readable"
+  @get external writable: t => WritableStream.t<Uint8Array.t> = "writable"
+  @send external closeWrite: t => Promise.t<unit> = "close"
+  @send external ref: t => unit = "ref"
+  @send external unref: t => unit = "unref"
+}
+
+module ConnectTlsOptions = {
+  type t = {
+    port: int,
+    hostname?: string,
+    certFile?: string,
+    caCerts?: Belt.Array.t<string>,
+    alpnProtocols?: Belt.Array.t<string>,
+    certChain?: string,
+    privateKey?: string,
+  }
+}
+
+module TlsHandshakeInfo = {
+  type t
+
+  @get external alpnProtocol: t => Nullable.t<string> = "alpnProtocol"
+}
+
+module TlsConn = {
+  type t
+  @get external localAddr: t => NetAddr.t = "localAddr"
+  @get external remoteAddr: t => NetAddr.t = "remoteAddr"
+  @get external rid: t => int = "rid"
+  @get external readable: t => ReadableStream.t<Uint8Array.t> = "readable"
+  @get external writable: t => WritableStream.t<Uint8Array.t> = "writable"
+  @send external handshake: t => Promise.t<TlsHandshakeInfo.t> = "handshake"
+  @send external closeWrite: t => Promise.t<unit> = "close"
+  @send external ref: t => unit = "ref"
+  @send external unref: t => unit = "unref"
+}
+
+module NetworkInterfaceInfo = {
+  type t
+
+  @get external name: t => string = "name"
+
+  @get external family: t => string = "familly"
+
+  @get external address: t => string = "address"
+
+  @get external netmask: t => string = "netmask"
+
+  @get external scopeId: t => Nullable.t<string> = "scopeid"
+
+  @get external cidr: t => string = "cidr"
+
+  @get external mac: t => string = "mac"
+}
+
+module ResolveDnsOptions = {
+  type nameServer = {ipAddr: string, port?: int}
+
+  type t = {
+    nameServer?: nameServer,
+    signal?: AbortSignal.t,
+  }
+}
+
+module StartTlsOptions = {
+  type t = {
+    hostname?: string,
+    caCerts?: Belt.Array.t<string>,
+    alpnProtocols?: Belt.Array.t<string>,
+  }
+}
+
 @scope("Deno") external chmod: (string, int) => Promise.t<unit> = "chmod"
 
 @scope("Deno") external chmodSync: (string, int) => unit = "chmodSync"
@@ -471,61 +616,23 @@ let serveWithTlsOptions = (
   }
 }
 
-module ListenOptions = {
-  type t = {
-    hostname?: string,
-    port?: int,
-  }
-}
+@scope("Deno") external listen: TcpListenOptions.t => Listener.t<'a> = "listen"
 
-module TcpListenOptions = {
-  type t = {...ListenOptions.t, reusePort?: bool, transport?: string}
-}
-
-module Listener = {
-  type t
-
-  @get external addr: t => NetAddr.t = "addr"
-
-  @get external rid: t => int = "rid"
-
-  @send external accept: t => Promise.t<'a> = "accept"
-
-  @send external close: t => Promise.t<unit> = "close"
-
-  @send external ref: t => unit = "ref"
-
-  @send external unref: unit => unit = "unref"
-}
-
-@scope("Deno") external listen: TcpListenOptions.t => Listener.t = "listen"
-
-module ConnectOptions = {
-  type t = {
-    port: int,
-    hostname?: string,
-    transport?: string,
-  }
-}
-
-module TcpConn = {
-  type t
-
-  @get external localAddr: t => NetAddr.t = "localAddr"
-
-  @get external remoteAddr: t => NetAddr.t = "remoteAddr"
-
-  @get external rid: t => int = "rid"
-
-  @get external readable: t => ReadableStream.t<Uint8Array.t> = "readable"
-
-  @get external writable: t => WritableStream.t<Uint8Array.t> = "writable"
-
-  @send external closeWrite: t => Promise.t<unit> = "close"
-  @send external ref: t => unit = "ref"
-  @send external unref: t => unit = "unerf"
-  @send external setNoDelay: (t, bool) => unit = "setNoDelay"
-  @send external setKeepAlive: (t, bool) => unit = "setKeepAlive"
-}
+@scope("Deno") external listenTls: ListenTlsOptions.t => Listener.t<TlsConn.t> = "listenTls"
 
 @scope("Deno") external connect: ConnectOptions.t => Promise.t<TcpConn.t> = "connect"
+
+@scope("Deno") external connectTls: ConnectTlsOptions.t => Promise.t<TlsConn.t> = "connectTls"
+
+@scope("Deno")
+external networkInterfaces: unit => array<NetworkInterfaceInfo.t> = "networkInterfaces"
+
+@scope("Deno")
+external resolveDns: (string, string, ~options: ResolveDnsOptions.t=?) => Promise.t<string> =
+  "resolveDns"
+
+@scope("Deno")
+external shutdown: int => Promise.t<unit> = "shutdown"
+
+@scope("Deno")
+external startTls: (TcpConn.t, ~options: StartTlsOptions.t=?) => Promise.t<TlsConn.t> = "startTls"

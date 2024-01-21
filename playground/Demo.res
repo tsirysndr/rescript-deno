@@ -145,6 +145,8 @@ Console.log(await result->Response.json)
 let data = FormData.new()
 data->FormData.append("foo", String("bar"))
 
+Console.log(Deno.networkInterfaces())
+
 let request = Request.new(
   String("http://localhost:9007"),
   ~init={
@@ -158,6 +160,8 @@ Console.log(await request->Request.formData)
 
 let text = TextEncoder.new()->TextEncoder.encode("hello")
 Console.log(TextDecoder.new()->TextDecoder.decode(text))
+
+Console.log(await Deno.resolveDns("deno.land", "A"))
 
 Deno.serveWithOptions({port: 9007}, ~asyncHandler=async req => {
   let headers = req->Request.headers

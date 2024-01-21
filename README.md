@@ -98,15 +98,15 @@ There's still a good amount of bindings missing. Here's what's currently availab
   - [x] Deno.serve
   - [ ] Deno.serveHttp
 - [ ] I/O
-- [ ] Network
+- [x] Network
   - [x] Deno.connect
-  - [ ] Deno.connectTls
+  - [x] Deno.connectTls
   - [x] Deno.listen
-  - [ ] Deno.listenTls
-  - [ ] Deno.networkInterfaces
-  - [ ] Deno.resolveDns
-  - [ ] Deno.shutdown
-  - [ ] Deno.startTls
+  - [x] Deno.listenTls
+  - [x] Deno.networkInterfaces
+  - [x] Deno.resolveDns
+  - [x] Deno.shutdown
+  - [x] Deno.startTls
 - [ ] Observability
 - [ ] Performance
 - [ ] Permissions
@@ -127,10 +127,10 @@ There's still a good amount of bindings missing. Here's what's currently availab
   - [ ] Deno.Command
   - [ ] Deno.Process
   - [ ] Deno.kill
-  - [ ] Deno.run 
+  - [ ] Deno.run
 - [ ] Testing
   - [ ] Deno.test
-  - [ ] Deno.bench 
+  - [ ] Deno.bench
 - [ ] Timers
 - [ ] Typed Arrays
 - [ ] Web APIs
@@ -150,7 +150,6 @@ There's still a good amount of bindings missing. Here's what's currently availab
   - [ ] Worker
 - [ ] WebAssembly
 - [ ] WebGPU
-
 
 ## 🤝 Contributing
 
