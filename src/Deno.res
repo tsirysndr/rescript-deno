@@ -413,6 +413,67 @@ module StartTlsOptions = {
   }
 }
 
+module CommandOptions = {
+  type t<'a> = {
+    args?: Belt.Array.t<string>,
+    cwd?: string,
+    clearEnv?: bool,
+    env?: 'a,
+    uid?: int,
+    gid?: int,
+    signal?: AbortSignal.t,
+    stdin?: string,
+    stdout?: string,
+    stderr?: string,
+    windowsRawArguments?: bool,
+  }
+}
+
+module CommandOutput = {
+  type t
+
+  @get external success: t => bool = "success"
+  @get external code: t => int = "code"
+  @get external signal: t => Nullable.t<string> = "signal"
+  @get external stdout: t => Uint8Array.t = "stdout"
+  @get external stderr: t => Uint8Array.t = "stderr"
+}
+
+module CommandStatus = {
+  type t
+
+  @get external success: t => bool = "success"
+  @get external code: t => int = "code"
+  @get external signal: t => Nullable.t<string> = "signal"
+}
+
+module ChildProcess = {
+  type t
+
+  @get external pid: t => int = "pid"
+  @get external status: t => Promise.t<CommandStatus.t> = "status"
+  @get external stderr: t => ReadableStream.t<Uint8Array.t> = "stderr"
+  @get external stdin: t => ReadableStream.t<Uint8Array.t> = "stdin"
+  @get external stdout: t => ReadableStream.t<Uint8Array.t> = "stdout"
+
+  @send external kill: (t, string) => Promise.t<unit> = "kill"
+  @send external output: t => Promise.t<CommandOutput.t> = "output"
+  @send external ref: t => unit = "ref"
+  @send external unref: t => unit = "unref"
+}
+
+module Command = {
+  type t
+
+  @scope("Deno") @new external new: (string, ~options: CommandOptions.t<'a>=?) => t = "Command"
+
+  @send external output: t => Promise.t<CommandOutput.t> = "output"
+
+  @send external outputSync: t => CommandOutput.t = "outputSync"
+
+  @send external spawn: t => ChildProcess.t = "spawn"
+}
+
 @scope("Deno") external chmod: (string, int) => Promise.t<unit> = "chmod"
 
 @scope("Deno") external chmodSync: (string, int) => unit = "chmodSync"
@@ -636,3 +697,6 @@ external shutdown: int => Promise.t<unit> = "shutdown"
 
 @scope("Deno")
 external startTls: (TcpConn.t, ~options: StartTlsOptions.t=?) => Promise.t<TlsConn.t> = "startTls"
+
+@scope("Deno")
+external kill: (int, ~signo: string=?) => Promise.t<unit> = "kill"

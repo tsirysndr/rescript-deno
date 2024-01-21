@@ -122,12 +122,10 @@ There's still a good amount of bindings missing. Here's what's currently availab
   - [x] Deno.exit
 - [ ] Scheduling
 - [ ] Streams API
-- [ ] Sub Process
-  - [ ] Deno.ChildProcess
-  - [ ] Deno.Command
-  - [ ] Deno.Process
-  - [ ] Deno.kill
-  - [ ] Deno.run
+- [x] Sub Process
+  - [x] Deno.ChildProcess
+  - [x] Deno.Command
+  - [x] Deno.kill
 - [ ] Testing
   - [ ] Deno.test
   - [ ] Deno.bench

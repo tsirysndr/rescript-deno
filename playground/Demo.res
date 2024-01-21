@@ -163,6 +163,23 @@ Console.log(TextDecoder.new()->TextDecoder.decode(text))
 
 Console.log(await Deno.resolveDns("deno.land", "A"))
 
+let command = Deno.Command.new(
+  "ls",
+  ~options={
+    stdout: "piped",
+    stderr: "piped",
+  },
+)
+
+let process = command->Deno.Command.spawn
+let output = await process->Deno.ChildProcess.output
+let status = await process->Deno.ChildProcess.status
+
+Console.log(status->Deno.CommandStatus.code)
+
+let decoder = TextDecoder.new()
+Console.log(decoder->TextDecoder.decode(output->Deno.CommandOutput.stdout))
+
 Deno.serveWithOptions({port: 9007}, ~asyncHandler=async req => {
   let headers = req->Request.headers
   let body = await req->Request.text
