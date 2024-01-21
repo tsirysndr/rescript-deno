@@ -470,3 +470,32 @@ let serveWithTlsOptions = (
   | _ => failwith("serve: invalid arguments")
   }
 }
+
+module ListenOptions = {
+  type t = {
+    hostname?: string,
+    port?: int,
+  }
+}
+
+module TcpListenOptions = {
+  type t = {...ListenOptions.t, reusePort?: bool, transport?: string}
+}
+
+module Listener = {
+  type t
+
+  @get external addr: t => NetAddr.t = "addr"
+
+  @get external rid: t => int = "rid"
+
+  @send external accept: unit => Promise.t<'a> = "accept"
+
+  @send external close: unit => Promise.t<unit> = "close"
+
+  @send external ref: unit => unit = "ref"
+
+  @send external unref: unit => unit = "unref"
+}
+
+@scope("Deno") external listen: TcpListenOptions.t => Listener.t = "listen"

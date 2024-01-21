@@ -99,6 +99,7 @@ There's still a good amount of bindings missing. Here's what's currently availab
   - [ ] Deno.serveHttp
 - [ ] I/O
 - [ ] Network
+  - [x] Deno.listen
 - [ ] Observability
 - [ ] Performance
 - [ ] Permissions
