@@ -99,7 +99,14 @@ There's still a good amount of bindings missing. Here's what's currently availab
   - [ ] Deno.serveHttp
 - [ ] I/O
 - [ ] Network
+  - [x] Deno.connect
+  - [ ] Deno.connectTls
   - [x] Deno.listen
+  - [ ] Deno.listenTls
+  - [ ] Deno.networkInterfaces
+  - [ ] Deno.resolveDns
+  - [ ] Deno.shutdown
+  - [ ] Deno.startTls
 - [ ] Observability
 - [ ] Performance
 - [ ] Permissions
