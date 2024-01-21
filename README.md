@@ -76,8 +76,8 @@ There's still a good amount of bindings missing. Here's what's currently availab
   - [ ] DecompressionStream
 - [ ] DOM APIs
 - [ ] DOM Events
-- [ ] Encoding API
-  - [ ] TextDecoder
+- [x] Encoding API
+  - [x] TextDecoder
   - [x] TextEncoder
   - [x] atob
   - [x] btoa

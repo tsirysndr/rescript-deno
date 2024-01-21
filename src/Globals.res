@@ -40,10 +40,33 @@ module Event = {
   @send external stopPropagation: t => unit = "stopPropagation"
 }
 
+module TextDecoderOptions = {
+  type t = {stream?: bool}
+}
+
+module TextDecoder = {
+  type t
+
+  @get external encoding: t => string = "encoding"
+  @get external fatal: t => bool = "fatal"
+  @get external ignoreBOM: t => bool = "ignoreBOM"
+  @new external _new: ('a, 'b) => t = "TextDecoder"
+  @new
+  let new = (~label: option<string>=?, ~options: option<TextDecoderOptions.t>=?) => {
+    switch (label, options) {
+    | (Some(label), Some(options)) => _new(label, options)
+    | (None, None) => _new(None, None)
+    | (Some(label), None) => _new(label, None)
+    | (None, Some(options)) => _new(None, options)
+    }
+  }
+  @send external decode: (t, Uint8Array.t, ~options: TextDecoderOptions.t=?) => string = "decode"
+}
+
 module TextEncoder = {
   type t
-  @send external encode: (t, string) => Uint8Array.t = "encode"
   @new external new: unit => t = "TextEncoder"
+  @send external encode: (t, string) => Uint8Array.t = "encode"
 }
 
 module AbortSignal = {

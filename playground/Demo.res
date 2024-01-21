@@ -156,6 +156,9 @@ let request = Request.new(
 Console.log(request)
 Console.log(await request->Request.formData)
 
+let text = TextEncoder.new()->TextEncoder.encode("hello")
+Console.log(TextDecoder.new()->TextDecoder.decode(text))
+
 Deno.serveWithOptions({port: 9007}, ~asyncHandler=async req => {
   let headers = req->Request.headers
   let body = await req->Request.text
