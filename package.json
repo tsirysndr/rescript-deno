@@ -2,6 +2,7 @@
   "name": "@tsirysndr/rescript-deno",
   "version": "0.1.0",
   "description": "Deno bindings for ReScript",
+  "private": false,
   "scripts": {
     "res:build": "rescript",
     "res:clean": "rescript clean",
