@@ -24,23 +24,23 @@ Include them in your `rescript.json`:
 }
 ```
 
-`rescript-deno` is [namespaced](https://rescript-lang.org/docs/manual/latest/build-configuration#name-namespace), so you'll find all modules listed under the main module `RescriptDeno`.
+`rescript-deno` is [namespaced](https://rescript-lang.org/docs/manual/latest/build-configuration#name-namespace), so you'll find all modules listed under the main module `TsirysndrRescriptDeno`.
 
-**You're strongly encouraged to open `RescriptDeno` globally, to get the best possible developer experience.** You do that by adding this to your `rescript.json`:
+**You're strongly encouraged to open `TsirysndrRescriptDeno` globally, to get the best possible developer experience.** You do that by adding this to your `rescript.json`:
 
 ```json
 {
   "bsc-flags": [
     "-open RescriptCore",
-    "-open RescriptDeno",
-    "-open RescriptDeno.Globals"
+    "-open TsirysndrRescriptDeno",
+    "-open TsirysndrRescriptDeno.Globals"
   ]
 }
 ```
 
 This might be a matter of taste, but I recommend opening it to get the best experience.
 
-This will make all of Deno available to you without needing to dip into the `RescriptDeno` module explicitly.
+This will make all of Deno available to you without needing to dip into the `TsirysndrRescriptDeno` module explicitly.
 
 ## 🧑‍🔬 Examples
 
