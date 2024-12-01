@@ -286,7 +286,7 @@ module ListenTlsOptions = {
     cert?: string,
     certFile?: string,
     keyFile?: string,
-    alpnProtocols?: Belt.Array.t<string>,
+    alpnProtocols?: array<string>,
   }
 }
 
@@ -352,8 +352,8 @@ module ConnectTlsOptions = {
     port: int,
     hostname?: string,
     certFile?: string,
-    caCerts?: Belt.Array.t<string>,
-    alpnProtocols?: Belt.Array.t<string>,
+    caCerts?: array<string>,
+    alpnProtocols?: array<string>,
     certChain?: string,
     privateKey?: string,
   }
@@ -408,14 +408,14 @@ module ResolveDnsOptions = {
 module StartTlsOptions = {
   type t = {
     hostname?: string,
-    caCerts?: Belt.Array.t<string>,
-    alpnProtocols?: Belt.Array.t<string>,
+    caCerts?: array<string>,
+    alpnProtocols?: array<string>,
   }
 }
 
 module CommandOptions = {
   type t<'a> = {
-    args?: Belt.Array.t<string>,
+    args?: array<string>,
     cwd?: string,
     clearEnv?: bool,
     env?: 'a,

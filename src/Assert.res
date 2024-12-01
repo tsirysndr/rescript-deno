@@ -36,13 +36,13 @@ external assertLess: ('a, 'a, ~msg: string=?) => unit = "assertLess"
 external assertLessOrEqual: ('a, 'a, ~msg: string=?) => unit = "assertLessOrEqual"
 
 @module("https://deno.land/std@0.212.0/assert/mod.ts")
-external assertMatch: (string, Js.Re.t, ~msg: string=?) => unit = "assertMatch"
+external assertMatch: (string, RegExp.t, ~msg: string=?) => unit = "assertMatch"
 
 @module("https://deno.land/std@0.212.0/assert/mod.ts")
 external assertNotEquals: ('a, 'a, ~msg: string=?) => unit = "assertNotEquals"
 
 @module("https://deno.land/std@0.212.0/assert/mod.ts")
-external assertNotMatch: (string, Js.Re.t, ~msg: string=?) => unit = "assertNotMatch"
+external assertNotMatch: (string, RegExp.t, ~msg: string=?) => unit = "assertNotMatch"
 
 @module("https://deno.land/std@0.212.0/assert/mod.ts")
 external assertNotStrictEquals: ('a, 'a, ~msg: string=?) => unit = "assertNotStrictEquals"
