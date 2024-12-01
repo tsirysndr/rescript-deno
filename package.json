@@ -1,6 +1,7 @@
 {
-  "name": "rescript-deno",
-  "version": "0.0.0",
+  "name": "@tsirysndr/rescript-deno",
+  "version": "0.1.0",
+  "description": "Deno bindings for ReScript",
   "scripts": {
     "res:build": "rescript",
     "res:clean": "rescript clean",
@@ -9,7 +10,8 @@
   "keywords": [
     "rescript"
   ],
-  "author": "",
+  "author": "Tsiry Sandratraina <tsiry.sndr@fluentci.io>",
+  "repository": "tsirysndr/rescript-deno",
   "license": "MIT",
   "dependencies": {
     "@rescript/core": "0.6.0",
