@@ -1,5 +1,5 @@
 {
-  "name": "@tsirysndr/rescript-deno",
+  "name": "rescript-deno",
   "namespace": true,
   "sources": [
     {
