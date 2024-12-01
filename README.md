@@ -31,9 +31,9 @@ Include them in your `rescript.json`:
 ```json
 {
   "bsc-flags": [
-    "-open RescriptCore",
     "-open TsirysndrRescriptDeno",
-    "-open TsirysndrRescriptDeno.Globals"
+    "-open TsirysndrRescriptDeno.Globals",
+    "-open RescriptCore"
   ]
 }
 ```
