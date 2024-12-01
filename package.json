@@ -1,6 +1,6 @@
 {
   "name": "@tsirysndr/rescript-deno",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Deno bindings for ReScript",
   "private": false,
   "scripts": {
