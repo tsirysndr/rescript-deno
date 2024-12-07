@@ -1,4 +1,7 @@
-![cover](https://cdn.jsdelivr.net/gh/tsirysndr/rescript-deno@main/.github/images/cover.png)
+<div>
+  <img src="https://rescript-lang.org/static/brand/rescript-logo.svg" width="400"  />
+  <img src="https://github.com/denoland/docs/raw/fc4f4c790d9b76fa03fd3b61f6ee086431de3a10/static/img/logo.svg" height="100" /> 
+</div>
 
 # rescript-deno 🦕
 
