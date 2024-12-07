@@ -3,10 +3,18 @@ open Archive.Untar
 open IO
 open Globals
 open Assert
+open Yaml
 
 Console.log("Hello, world!")
 Console.log(Deno.env->Env.get("HOME"))
 Console.log(Deno.env->Env.has("PATH"))
+
+let yaml = `
+  id: 1
+  name: "Alice"
+`
+
+Console.log(parse(yaml))
 
 let tar = newTar()
 let content = TextEncoder.new()->TextEncoder.encode("hello")
