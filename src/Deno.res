@@ -700,3 +700,163 @@ external startTls: (TcpConn.t, ~options: StartTlsOptions.t=?) => Promise.t<TlsCo
 
 @scope("Deno")
 external kill: (int, ~signo: string=?) => Promise.t<unit> = "kill"
+
+module Telemetry = {
+  module Context = {
+    type t
+
+    @send external deleteValue: (t, string) => t = "deleteValue"
+    @send external getValue: (t, string) => 'a = "getValue"
+    @send external setValue: (t, string, 'a) => t = "setValue"
+  }
+
+  module ContextManager = {
+    type t
+
+    @send external active: t => Context.t = "active"
+    @send external bind: (t, Context.t, 'a) => 'a = "bind"
+    @send external disable: t => t = "disable"
+    @send external enable: t => t = "disable"
+  }
+
+  module Attributes = {
+    type t<'a> = Map(Js.Dict.t<'a>)
+  }
+
+  module IArrayValue = {
+    type t<'a> = {values: array<'a>}
+  }
+
+  module IKeyValueList = {
+    type t
+  }
+
+  module IAnyValue = {
+    type rec t = {
+      arrayValue?: IArrayValue.t<t>,
+      boolValue?: Js.Nullable.t<bool>,
+      bytesValue?: Uint8Array.t,
+      doubleValue?: Js.Nullable.t<float>,
+      intValue?: Js.Nullable.t<int>,
+      kvlistValue?: IKeyValueList.t,
+      stringValue?: Js.Nullable.t<string>,
+    }
+  }
+
+  module IKeyValue = {
+    type t = {
+      key: string,
+      value: IAnyValue.t,
+    }
+  }
+
+  module IResource = {
+    type t = {
+      attributes: array<IKeyValue.t>,
+      droppedAttributesCount?: int,
+    }
+  }
+
+  module HrTime = {
+    type t = Time(array<float>)
+  }
+
+  module SpanStatusCode = {
+    type t =
+      | @int(2) Error
+      | @int(1) Ok
+      | @int(0) Unset
+  }
+
+  module SpanStatus = {
+    type t = {
+      code: SpanStatusCode.t,
+      message?: string,
+    }
+  }
+
+  module TraceState = {
+    type t
+
+    @send external get: string => option<string> = "get"
+    @send external serialize: unit => string = "serialize"
+    @send external set: (string, string) => t = "set"
+    @send external unset: string => t = "unset"
+  }
+
+  module SpanContext = {
+    type t = {
+      isRemote?: bool,
+      spanId: string,
+      traceFlags: int,
+      traceId: string,
+      traceState?: TraceState.t,
+    }
+  }
+
+  module Link = {
+    type t<'a> = {
+      attributes?: Attributes.t<'a>,
+      context: SpanContext.t,
+      droppedAttributesCount?: int,
+    }
+  }
+
+  module SpanKind = {
+    type t =
+      | @int(2) Client
+      | @int(4) Consumer
+      | @int(0) Internal
+      | @int(3) Producer
+      | @int(1) Server
+  }
+
+  module InstrumentationLibrary = {
+    type t = {
+      name: string,
+      schemaUrl?: string,
+      version?: string,
+    }
+  }
+
+  module TimedEvent = {
+    type t
+
+    @get external attributes: t => option<Attributes.t<'a>> = "attributes"
+    @get external droppedAttributesCount: t => int = "droppedAttributesCount"
+    @get external name: t => string = "name"
+    @get external time: t => HrTime.t = "time"
+  }
+
+  module ReadableSpan = {
+    type t
+
+    @get external attibutes: t => Attributes.t<'a> = "attributes"
+    @get external droppedAttributesCount: t => int = "droppedAttributesCount"
+    @get external droppedEventsCount: t => int = "droppedEventsCount"
+    @get external droppedLinksCount: t => int = "droppedLinksCount"
+    @get external duration: t => HrTime.t = "duration"
+    @get external endTime: t => HrTime.t = "endTime"
+    @get external ended: t => bool = "ended"
+    @get external events: t => array<TimedEvent.t> = "events"
+    @get external instrumentationLibrary: t => InstrumentationLibrary.t = "instrumentationLibrary"
+    @get external kind: t => array<SpanKind.t> = "kind"
+    @get external links: t => array<Link.t<'a>> = "links"
+    @get external name: t => string = "name"
+    @get external parentSpanId: t => option<string> = "parentSpanId"
+    @get external resource: t => IResource.t = "resource"
+    @get external startTime: t => HrTime.t = "startTime"
+    @get external status: t => SpanStatus.t = "status"
+    @send external spanContext: t => SpanContext.t = "spanContext"
+  }
+
+  module SpanExporter = {
+    type t
+
+    @send external export: (t, array<ReadableSpan.t>, 'a) => unit = "export"
+
+    @send external forceFlush: t => Promise.t<unit> = "forceFlush"
+
+    @send external shutdown: t => Promise.t<unit> = "shutdown"
+  }
+}
