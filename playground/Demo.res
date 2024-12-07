@@ -21,6 +21,16 @@ let content = TextEncoder.new()->TextEncoder.encode("hello")
 
 let b = Buffer.new(content)
 
+let obj = {
+  "title": "TOML example",
+  "owner": {
+    "name": "Bob",
+    "bio": "Bob is a cool guy",
+  },
+}
+
+Console.log(Toml.stringify(obj))
+
 Console.log(b->Buffer.empty)
 Console.log(b->Buffer.bytes)
 
