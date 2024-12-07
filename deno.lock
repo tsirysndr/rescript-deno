@@ -3,6 +3,7 @@
   "specifiers": {
     "jsr:@std/cli@*": "1.0.6",
     "jsr:@std/collections@^1.0.5": "1.0.7",
+    "jsr:@std/path@*": "1.0.6",
     "jsr:@std/toml@*": "1.0.1",
     "jsr:@std/yaml@*": "1.0.5"
   },
@@ -12,6 +13,9 @@
     },
     "@std/collections@1.0.7": {
       "integrity": "6cff6949907372564735e25a5c6a7945d67cc31913b1b4d1278d08c2a5a3291d"
+    },
+    "@std/path@1.0.6": {
+      "integrity": "ab2c55f902b380cf28e0eec501b4906e4c1960d13f00e11cfbcd21de15f18fed"
     },
     "@std/toml@1.0.1": {
       "integrity": "b55b407159930f338d384b1f8fd317c8e8a35e27ebb8946155f49e3a158d16c4",
