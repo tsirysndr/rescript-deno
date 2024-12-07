@@ -179,6 +179,66 @@ function serveWithTlsOptions(options, handler, asyncHandler) {
   }
 }
 
+var Context = {};
+
+var ContextManager = {};
+
+var Attributes = {};
+
+var IArrayValue = {};
+
+var IKeyValueList = {};
+
+var IAnyValue = {};
+
+var IKeyValue = {};
+
+var IResource = {};
+
+var HrTime = {};
+
+var SpanStatusCode = {};
+
+var SpanStatus = {};
+
+var TraceState = {};
+
+var SpanContext = {};
+
+var Link = {};
+
+var SpanKind = {};
+
+var InstrumentationLibrary = {};
+
+var TimedEvent = {};
+
+var ReadableSpan = {};
+
+var SpanExporter = {};
+
+var Telemetry = {
+  Context: Context,
+  ContextManager: ContextManager,
+  Attributes: Attributes,
+  IArrayValue: IArrayValue,
+  IKeyValueList: IKeyValueList,
+  IAnyValue: IAnyValue,
+  IKeyValue: IKeyValue,
+  IResource: IResource,
+  HrTime: HrTime,
+  SpanStatusCode: SpanStatusCode,
+  SpanStatus: SpanStatus,
+  TraceState: TraceState,
+  SpanContext: SpanContext,
+  Link: Link,
+  SpanKind: SpanKind,
+  InstrumentationLibrary: InstrumentationLibrary,
+  TimedEvent: TimedEvent,
+  ReadableSpan: ReadableSpan,
+  SpanExporter: SpanExporter
+};
+
 export {
   SeekMode ,
   FileInfo ,
@@ -225,5 +285,6 @@ export {
   serveWithOptions ,
   serveWithUnixOptions ,
   serveWithTlsOptions ,
+  Telemetry ,
 }
 /* No side effect */
