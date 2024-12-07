@@ -4,6 +4,10 @@ open IO
 open Globals
 open Assert
 open Yaml
+// open Cli
+
+// let secret = promptSecret(~message="Enter your password: ")
+// Console.log(secret)
 
 Console.log("Hello, world!")
 Console.log(Deno.env->Env.get("HOME"))
