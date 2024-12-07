@@ -9,6 +9,8 @@ open Yaml
 // let secret = promptSecret(~message="Enter your password: ")
 // Console.log(secret)
 
+Console.log(Path.join(["hello", "world"]))
+
 Console.log("Hello, world!")
 Console.log(Deno.env->Env.get("HOME"))
 Console.log(Deno.env->Env.has("PATH"))
