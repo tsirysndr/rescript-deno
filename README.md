@@ -140,9 +140,9 @@ There's still a good amount of bindings missing. Here's what's currently availab
   - [x] Blob
   - [x] File
   - [ ] FileReader
-- [ ] Web Sockets
-  - [ ] CloseEvent
-  - [ ] WebSocket
+- [x] Web Sockets
+  - [x] CloseEvent
+  - [x] WebSocket
 - [ ] Web Storage API
   - [ ] Storage
   - [ ] localStorage
