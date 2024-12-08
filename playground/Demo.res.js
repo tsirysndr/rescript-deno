@@ -11,6 +11,23 @@ import * as ModTs from "https://deno.land/std@0.212.0/assert/mod.ts";
 import * as TarTs from "https://deno.land/std@0.212.0/archive/tar.ts";
 import * as UntarTs from "https://deno.land/std@0.212.0/archive/untar.ts";
 
+var desc = {
+  TAG: "Read",
+  _0: {
+    name: "read",
+    path: {
+      TAG: "String",
+      _0: "/etc"
+    }
+  }
+};
+
+var status = await Deno.permissions.query(Deno$TsirysndrRescriptDeno.PermissionDescriptor.unwrap(desc));
+
+console.log("Read permission status:");
+
+console.log(status.state);
+
 var schedule = {
   TAG: "String",
   _0: "* * * * *"
@@ -247,9 +264,9 @@ var $$process = command.spawn();
 
 var output = await $$process.output();
 
-var status = await $$process.status;
+var status$1 = await $$process.status;
 
-console.log(status.code);
+console.log(status$1.code);
 
 var decoder = Globals$TsirysndrRescriptDeno.$$TextDecoder.$$new(undefined, undefined);
 
@@ -274,6 +291,7 @@ var a = 1;
 var y = z;
 
 export {
+  desc ,
   schedule ,
   handler ,
   kv ,
@@ -300,7 +318,7 @@ export {
   command ,
   $$process ,
   output ,
-  status ,
+  status$1 as status,
   decoder ,
 }
-/*  Not a pure module */
+/* status Not a pure module */

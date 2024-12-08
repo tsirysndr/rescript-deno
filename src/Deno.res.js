@@ -396,6 +396,83 @@ var CronHandler = {
   unwrap: unwrap$7
 };
 
+function unwrap$8(descriptor) {
+  var match = descriptor.command;
+  return {
+          name: descriptor.name,
+          command: match !== undefined ? match._0 : undefined
+        };
+}
+
+var RunPermissionDescriptor = {
+  unwrap: unwrap$8
+};
+
+function unwrap$9(descriptor) {
+  var match = descriptor.path;
+  return {
+          name: descriptor.name,
+          path: match !== undefined ? match._0 : undefined
+        };
+}
+
+var ReadPermissionDescriptor = {
+  unwrap: unwrap$9
+};
+
+function unwrap$10(descriptor) {
+  var match = descriptor.path;
+  return {
+          name: descriptor.name,
+          path: match !== undefined ? match._0 : undefined
+        };
+}
+
+var WritePermissionDescriptor = {
+  unwrap: unwrap$10
+};
+
+var NetPermissionDescriptor = {};
+
+var EnvPermissionDescriptor = {};
+
+var SysPermissionDescriptor = {};
+
+function unwrap$11(descriptor) {
+  var match = descriptor.path;
+  return {
+          name: descriptor.name,
+          path: match !== undefined ? match._0 : undefined
+        };
+}
+
+var FfiPermissionDescriptor = {
+  unwrap: unwrap$11
+};
+
+function unwrap$12(descriptor) {
+  switch (descriptor.TAG) {
+    case "Run" :
+        return unwrap$8(descriptor._0);
+    case "Read" :
+        return unwrap$9(descriptor._0);
+    case "Ffi" :
+        return unwrap$11(descriptor._0);
+    default:
+      return descriptor._0;
+  }
+}
+
+var PermissionDescriptor = {
+  unwrap: unwrap$12
+};
+
+var PermissionState = {};
+
+var $$PermissionStatus = {};
+
+var $$Permissions = {};
+
 export {
   ConsoleSize ,
   InspectOptions ,
@@ -483,5 +560,16 @@ export {
   Kv ,
   Schedule ,
   CronHandler ,
+  RunPermissionDescriptor ,
+  ReadPermissionDescriptor ,
+  WritePermissionDescriptor ,
+  NetPermissionDescriptor ,
+  EnvPermissionDescriptor ,
+  SysPermissionDescriptor ,
+  FfiPermissionDescriptor ,
+  PermissionDescriptor ,
+  PermissionState ,
+  $$PermissionStatus ,
+  $$Permissions ,
 }
 /* No side effect */

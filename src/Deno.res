@@ -1340,3 +1340,173 @@ module CronHandler = {
 
 @scope("Deno") external openKv: (~path: string=?) => Promise.t<Kv.t> = "openKv"
 @scope("Deno") external cron: (string, Schedule.t, CronHandler.t) => Promise.t<unit> = "cron"
+
+module RunPermissionDescriptor = {
+  type c = String(string) | URL(URL.t)
+
+  type t = {
+    name: string,
+    command?: c,
+  }
+
+  let unwrap = (descriptor: t) =>
+    Obj.magic({
+      name: descriptor.name,
+      command: switch descriptor.command {
+      | Some(String(value)) => Obj.magic(value)
+      | Some(URL(value)) => Obj.magic(value)
+      | None => Obj.magic(undefined)
+      },
+    })
+}
+
+module ReadPermissionDescriptor = {
+  type p = String(string) | URL(URL.t)
+
+  type t = {
+    name: string,
+    path?: p,
+  }
+
+  let unwrap = (descriptor: t) =>
+    Obj.magic({
+      name: descriptor.name,
+      path: switch descriptor.path {
+      | Some(String(value)) => Obj.magic(value)
+      | Some(URL(value)) => Obj.magic(value)
+      | None => Obj.magic(undefined)
+      },
+    })
+}
+
+module WritePermissionDescriptor = {
+  type p = String(string) | URL(URL.t)
+
+  type t = {
+    name: string,
+    path?: p,
+  }
+
+  let unwrap = (descriptor: t) =>
+    Obj.magic({
+      name: descriptor.name,
+      path: switch descriptor.path {
+      | Some(String(value)) => Obj.magic(value)
+      | Some(URL(value)) => Obj.magic(value)
+      | None => Obj.magic(undefined)
+      },
+    })
+}
+
+module NetPermissionDescriptor = {
+  type t = {
+    name: string,
+    host?: string,
+  }
+}
+
+module EnvPermissionDescriptor = {
+  type t = {
+    name: string,
+    variable?: string,
+  }
+}
+
+module SysPermissionDescriptor = {
+  type kind =
+    | Loadavg
+    | Hostname
+    | SystemMemoryInfo
+    | NeworkInterfaces
+    | OsRelease
+    | OsUptime
+    | Uid
+    | Gid
+    | Username
+    | Cpus
+    | Homedir
+    | Statfs
+    | GetPriority
+    | SetPriority
+
+  type t = {
+    name: string,
+    kind: kind,
+  }
+}
+
+module FfiPermissionDescriptor = {
+  type p = String(string) | URL(URL.t)
+
+  type t = {
+    name: string,
+    path?: p,
+  }
+
+  let unwrap = (descriptor: t) =>
+    Obj.magic({
+      name: descriptor.name,
+      path: switch descriptor.path {
+      | Some(String(value)) => Obj.magic(value)
+      | Some(URL(value)) => Obj.magic(value)
+      | None => Obj.magic(undefined)
+      },
+    })
+}
+
+module PermissionDescriptor = {
+  type t =
+    | Run(RunPermissionDescriptor.t)
+    | Read(ReadPermissionDescriptor.t)
+    | Write(WritePermissionDescriptor.t)
+    | Net(NetPermissionDescriptor.t)
+    | Env(EnvPermissionDescriptor.t)
+    | Sys(SysPermissionDescriptor.t)
+    | Ffi(FfiPermissionDescriptor.t)
+
+  let unwrap = (descriptor: t) => {
+    switch descriptor {
+    | Run(descriptor) => descriptor->RunPermissionDescriptor.unwrap
+    | Read(descriptor) => descriptor->ReadPermissionDescriptor.unwrap
+    | Write(descriptor) => Obj.magic(descriptor)
+    | Net(descriptor) => Obj.magic(descriptor)
+    | Env(descriptor) => Obj.magic(descriptor)
+    | Sys(descriptor) => Obj.magic(descriptor)
+    | Ffi(descriptor) => descriptor->FfiPermissionDescriptor.unwrap
+    }
+  }
+}
+
+module PermissionState = {
+  type t =
+    | Granted
+    | Denied
+    | Prompt
+}
+
+module PermissionStatus = {
+  type t = {
+    partial: bool,
+    state: PermissionState.t,
+  }
+  @send external onchange: (t, 'a) => Js.Nullable.t<'b> = "onchange"
+  @send
+  external addEventListener: (t, 'a, 'b, ~options: AddEventListenerOptions.t=?) => unit =
+    "addEventListener"
+  @send
+  external removeEventListener: (t, 'a, 'b, ~options: EventListenerOptions.t=?) => unit =
+    "removeEventListener"
+}
+
+module Permissions = {
+  type t
+
+  @send external query: (t, PermissionDescriptor.t) => Promise.t<PermissionStatus.t> = "query"
+  @send external querySync: (t, PermissionDescriptor.t) => PermissionStatus.t = "querySync"
+  @send external request: (t, PermissionDescriptor.t) => Promise.t<PermissionStatus.t> = "request"
+  @send external requestSync: (t, PermissionDescriptor.t) => PermissionStatus.t = "requestSync"
+  @send external revoke: (t, PermissionDescriptor.t) => Promise.t<PermissionStatus.t> = "revoke"
+  @send external revokeSync: (t, PermissionDescriptor.t) => PermissionStatus.t = "revokeSync"
+}
+
+@scope("Deno") @val external permissions: Permissions.t = "permissions"
