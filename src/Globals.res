@@ -34,7 +34,7 @@ module Event = {
   @get external _CAPTURING_PHASE: t => int = "CAPTURING_PHASE"
   @get external _NONE: t => int = "NONE"
 
-  @send external composedPath: t => Belt.Array.t<EventTarget.t> = "composedPath"
+  @send external composedPath: t => array<EventTarget.t> = "composedPath"
   @send external preventDefault: t => unit = "preventDefault"
   @send external stopImmediatePropagation: t => unit = "stopImmediatePropagation"
   @send external stopPropagation: t => unit = "stopPropagation"
@@ -204,7 +204,7 @@ module GPUSupportedLimits = {
 
 module GPUDeviceDescriptor = {
   type t
-  @get external requiredFeatures: t => Belt.Array.t<string> = "extensions"
+  @get external requiredFeatures: t => array<string> = "extensions"
   @get external requiredLimits: t => 'a = "requiredLimits"
 }
 
@@ -246,10 +246,8 @@ module GPUAdapter = {
   @get external limits: t => GPUSupportedLimits.t = "limits"
   @get external isFallbackAdapter: t => bool = "isFallbackAdapter"
   @send
-  external requestAdapterInfo: (
-    t,
-    ~unmaskHints: Belt.Array.t<string>=?,
-  ) => Promise.t<GPUAdapterInfo.t> = "requestAdapterInfo"
+  external requestAdapterInfo: (t, ~unmaskHints: array<string>=?) => Promise.t<GPUAdapterInfo.t> =
+    "requestAdapterInfo"
   @send
   external requestDevice: (t, ~descriptor: GPUDeviceDescriptor.t=?) => Promise.t<GPUDevice.t> =
     "requestDevice"
@@ -268,7 +266,7 @@ module Navigator = {
   @get external hardwareConcurrency: t => int = "hardwareConcurrency"
   @get external userAgent: t => string = "userAgent"
   @get external language: t => string = "language"
-  @get external languages: t => Belt.Array.t<string> = "languages"
+  @get external languages: t => array<string> = "languages"
 }
 
 module URLSearchParams = {
@@ -277,11 +275,11 @@ module URLSearchParams = {
   @get external size: t => int = "size"
   @send external append: (t, string, string) => unit = "append"
   @send external delete: (t, string) => unit = "delete"
-  @send external getAll: (t, string) => Belt.Array.t<string> = "getAll"
+  @send external getAll: (t, string) => array<string> = "getAll"
   @send external entries: t => 'a = "entries"
   @send external forEach: (t, (string, string, 'b) => unit, ~thisArg: 'c=?) => unit = "forEach"
   @send external get: (t, string) => string = "get"
-  @send external getAll: (t, string) => Belt.Array.t<string> = "getAll"
+  @send external getAll: (t, string) => array<string> = "getAll"
   @send external has: (t, string) => bool = "has"
   @send external keys: t => 'a = "keys"
   @send external set: (t, string, string) => unit = "set"
@@ -351,7 +349,7 @@ module URLPattern = {
 
   @send external test: (t, URLPatternInput.t, ~baseURL: string=?) => bool = "test"
   @send
-  external exec: (t, URLPatternInput.t, ~baseURL: string=?) => option<Belt.Array.t<string>> = "exec"
+  external exec: (t, URLPatternInput.t, ~baseURL: string=?) => option<array<string>> = "exec"
 }
 
 module ErrorEventInit = {
@@ -469,7 +467,7 @@ module ReadableStream = {
 
   @send external pipeTo: ('a, ~options: PipeOptions.t=?) => Promise.t<unit> = "pipeTo"
 
-  @send external tee: t<'a> => Belt.Array.t<t<'b>> = "tee"
+  @send external tee: t<'a> => array<t<'b>> = "tee"
 
   @send external values: (t<'a>, ~options: 'b=?) => 'c = "values"
 }
@@ -489,7 +487,7 @@ module Headers = {
   @send external get: (t, string) => option<string> = "get"
   @send external has: (t, string) => bool = "has"
   @send external set: (t, string, string) => unit = "set"
-  @send external getSetCookie: t => Belt.Array.t<string> = "getSetCookie"
+  @send external getSetCookie: t => array<string> = "getSetCookie"
 }
 
 module BufferSource = {
@@ -498,8 +496,8 @@ module BufferSource = {
 
 module BlobParts = {
   type t =
-    | BufferSources(Belt.Array.t<BufferSource.t>)
-    | Strings(Belt.Array.t<string>)
+    | BufferSources(array<BufferSource.t>)
+    | Strings(array<string>)
 }
 
 module BlobPropertyBag = {
@@ -590,7 +588,7 @@ module FormData = {
 
   @send external get: (t, string) => option<FormDataEntryValue.t> = "get"
 
-  @send external getAll: (t, string) => Belt.Array.t<FormDataEntryValue.t> = "getAll"
+  @send external getAll: (t, string) => array<FormDataEntryValue.t> = "getAll"
 
   @send external has: (t, string) => bool = "has"
 
@@ -671,22 +669,19 @@ module RequestInit = {
   let _newBlob = (init: t<'a, 'b>, body: Blob.t) => {
     {
       body: Some(body),
-      cache: Belt.Option.getWithDefault(init.cache, ""),
-      credentials: Belt.Option.getWithDefault(init.credentials, ""),
-      destination: Belt.Option.getWithDefault(init.destination, ""),
+      cache: Option.getOr(init.cache, ""),
+      credentials: Option.getOr(init.credentials, ""),
+      destination: Option.getOr(init.destination, ""),
       headers: init.headers,
-      integrity: Belt.Option.getWithDefault(init.integrity, ""),
-      keepalive: Belt.Option.getWithDefault(init.keepalive, true),
-      method: Belt.Option.getWithDefault(init.method, "GET"),
-      mode: Belt.Option.getWithDefault(init.mode, "cors"),
-      redirect: Belt.Option.getWithDefault(init.redirect, "follow"),
-      referer: Belt.Option.getWithDefault(init.referer, ""),
-      refererPolicy: Belt.Option.getWithDefault(init.refererPolicy, ""),
-      signal: Belt.Option.getWithDefault(
-        init.signal,
-        AbortController.signal(AbortController.new()),
-      ),
-      window: Belt.Option.getWithDefault(init.window, Window.window),
+      integrity: Option.getOr(init.integrity, ""),
+      keepalive: Option.getOr(init.keepalive, true),
+      method: Option.getOr(init.method, "GET"),
+      mode: Option.getOr(init.mode, "cors"),
+      redirect: Option.getOr(init.redirect, "follow"),
+      referer: Option.getOr(init.referer, ""),
+      refererPolicy: Option.getOr(init.refererPolicy, ""),
+      signal: Option.getOr(init.signal, AbortController.signal(AbortController.new())),
+      window: Option.getOr(init.window, Window.window),
     }
   }
 
@@ -694,22 +689,19 @@ module RequestInit = {
   let _newBufferSource = (init: t<'a, 'b>, body: BufferSource.t) => {
     {
       body: Some(body),
-      cache: Belt.Option.getWithDefault(init.cache, ""),
-      credentials: Belt.Option.getWithDefault(init.credentials, ""),
-      destination: Belt.Option.getWithDefault(init.destination, ""),
+      cache: Option.getOr(init.cache, ""),
+      credentials: Option.getOr(init.credentials, ""),
+      destination: Option.getOr(init.destination, ""),
       headers: init.headers,
-      integrity: Belt.Option.getWithDefault(init.integrity, ""),
-      keepalive: Belt.Option.getWithDefault(init.keepalive, true),
-      method: Belt.Option.getWithDefault(init.method, "GET"),
-      mode: Belt.Option.getWithDefault(init.mode, "cors"),
-      redirect: Belt.Option.getWithDefault(init.redirect, "follow"),
-      referer: Belt.Option.getWithDefault(init.referer, ""),
-      refererPolicy: Belt.Option.getWithDefault(init.refererPolicy, ""),
-      signal: Belt.Option.getWithDefault(
-        init.signal,
-        AbortController.signal(AbortController.new()),
-      ),
-      window: Belt.Option.getWithDefault(init.window, Window.window),
+      integrity: Option.getOr(init.integrity, ""),
+      keepalive: Option.getOr(init.keepalive, true),
+      method: Option.getOr(init.method, "GET"),
+      mode: Option.getOr(init.mode, "cors"),
+      redirect: Option.getOr(init.redirect, "follow"),
+      referer: Option.getOr(init.referer, ""),
+      refererPolicy: Option.getOr(init.refererPolicy, ""),
+      signal: Option.getOr(init.signal, AbortController.signal(AbortController.new())),
+      window: Option.getOr(init.window, Window.window),
     }
   }
 
@@ -717,22 +709,19 @@ module RequestInit = {
   let _newFormData = (init: t<'a, 'b>, body: FormData.t) => {
     {
       body: Some(body),
-      cache: Belt.Option.getWithDefault(init.cache, ""),
-      credentials: Belt.Option.getWithDefault(init.credentials, ""),
-      destination: Belt.Option.getWithDefault(init.destination, ""),
+      cache: Option.getOr(init.cache, ""),
+      credentials: Option.getOr(init.credentials, ""),
+      destination: Option.getOr(init.destination, ""),
       headers: init.headers,
-      integrity: Belt.Option.getWithDefault(init.integrity, ""),
-      keepalive: Belt.Option.getWithDefault(init.keepalive, true),
-      method: Belt.Option.getWithDefault(init.method, "GET"),
-      mode: Belt.Option.getWithDefault(init.mode, "cors"),
-      redirect: Belt.Option.getWithDefault(init.redirect, "follow"),
-      referer: Belt.Option.getWithDefault(init.referer, ""),
-      refererPolicy: Belt.Option.getWithDefault(init.refererPolicy, ""),
-      signal: Belt.Option.getWithDefault(
-        init.signal,
-        AbortController.signal(AbortController.new()),
-      ),
-      window: Belt.Option.getWithDefault(init.window, Window.window),
+      integrity: Option.getOr(init.integrity, ""),
+      keepalive: Option.getOr(init.keepalive, true),
+      method: Option.getOr(init.method, "GET"),
+      mode: Option.getOr(init.mode, "cors"),
+      redirect: Option.getOr(init.redirect, "follow"),
+      referer: Option.getOr(init.referer, ""),
+      refererPolicy: Option.getOr(init.refererPolicy, ""),
+      signal: Option.getOr(init.signal, AbortController.signal(AbortController.new())),
+      window: Option.getOr(init.window, Window.window),
     }
   }
 
@@ -740,22 +729,19 @@ module RequestInit = {
   let _newURLSearchParams = (init: t<'a, 'b>, body: URLSearchParams.t) => {
     {
       body: Some(body),
-      cache: Belt.Option.getWithDefault(init.cache, ""),
-      credentials: Belt.Option.getWithDefault(init.credentials, ""),
-      destination: Belt.Option.getWithDefault(init.destination, ""),
+      cache: Option.getOr(init.cache, ""),
+      credentials: Option.getOr(init.credentials, ""),
+      destination: Option.getOr(init.destination, ""),
       headers: init.headers,
-      integrity: Belt.Option.getWithDefault(init.integrity, ""),
-      keepalive: Belt.Option.getWithDefault(init.keepalive, true),
-      method: Belt.Option.getWithDefault(init.method, "GET"),
-      mode: Belt.Option.getWithDefault(init.mode, "cors"),
-      redirect: Belt.Option.getWithDefault(init.redirect, "follow"),
-      referer: Belt.Option.getWithDefault(init.referer, ""),
-      refererPolicy: Belt.Option.getWithDefault(init.refererPolicy, ""),
-      signal: Belt.Option.getWithDefault(
-        init.signal,
-        AbortController.signal(AbortController.new()),
-      ),
-      window: Belt.Option.getWithDefault(init.window, Window.window),
+      integrity: Option.getOr(init.integrity, ""),
+      keepalive: Option.getOr(init.keepalive, true),
+      method: Option.getOr(init.method, "GET"),
+      mode: Option.getOr(init.mode, "cors"),
+      redirect: Option.getOr(init.redirect, "follow"),
+      referer: Option.getOr(init.referer, ""),
+      refererPolicy: Option.getOr(init.refererPolicy, ""),
+      signal: Option.getOr(init.signal, AbortController.signal(AbortController.new())),
+      window: Option.getOr(init.window, Window.window),
     }
   }
 
@@ -763,22 +749,19 @@ module RequestInit = {
   let _newReadableStream = (init: t<'a, 'b>, body: ReadableStream.t<Uint8Array.t>) => {
     {
       body: Some(body),
-      cache: Belt.Option.getWithDefault(init.cache, ""),
-      credentials: Belt.Option.getWithDefault(init.credentials, ""),
-      destination: Belt.Option.getWithDefault(init.destination, ""),
+      cache: Option.getOr(init.cache, ""),
+      credentials: Option.getOr(init.credentials, ""),
+      destination: Option.getOr(init.destination, ""),
       headers: init.headers,
-      integrity: Belt.Option.getWithDefault(init.integrity, ""),
-      keepalive: Belt.Option.getWithDefault(init.keepalive, true),
-      method: Belt.Option.getWithDefault(init.method, "GET"),
-      mode: Belt.Option.getWithDefault(init.mode, "cors"),
-      redirect: Belt.Option.getWithDefault(init.redirect, "follow"),
-      referer: Belt.Option.getWithDefault(init.referer, ""),
-      refererPolicy: Belt.Option.getWithDefault(init.refererPolicy, ""),
-      signal: Belt.Option.getWithDefault(
-        init.signal,
-        AbortController.signal(AbortController.new()),
-      ),
-      window: Belt.Option.getWithDefault(init.window, Window.window),
+      integrity: Option.getOr(init.integrity, ""),
+      keepalive: Option.getOr(init.keepalive, true),
+      method: Option.getOr(init.method, "GET"),
+      mode: Option.getOr(init.mode, "cors"),
+      redirect: Option.getOr(init.redirect, "follow"),
+      referer: Option.getOr(init.referer, ""),
+      refererPolicy: Option.getOr(init.refererPolicy, ""),
+      signal: Option.getOr(init.signal, AbortController.signal(AbortController.new())),
+      window: Option.getOr(init.window, Window.window),
     }
   }
 
@@ -786,22 +769,19 @@ module RequestInit = {
   let _newString = (init: t<'a, 'b>, body: string) => {
     {
       body: Some(body),
-      cache: Belt.Option.getWithDefault(init.cache, ""),
-      credentials: Belt.Option.getWithDefault(init.credentials, ""),
-      destination: Belt.Option.getWithDefault(init.destination, ""),
+      cache: Option.getOr(init.cache, ""),
+      credentials: Option.getOr(init.credentials, ""),
+      destination: Option.getOr(init.destination, ""),
       headers: init.headers,
-      integrity: Belt.Option.getWithDefault(init.integrity, ""),
-      keepalive: Belt.Option.getWithDefault(init.keepalive, true),
-      method: Belt.Option.getWithDefault(init.method, "GET"),
-      mode: Belt.Option.getWithDefault(init.mode, "cors"),
-      redirect: Belt.Option.getWithDefault(init.redirect, "follow"),
-      referer: Belt.Option.getWithDefault(init.referer, ""),
-      refererPolicy: Belt.Option.getWithDefault(init.refererPolicy, ""),
-      signal: Belt.Option.getWithDefault(
-        init.signal,
-        AbortController.signal(AbortController.new()),
-      ),
-      window: Belt.Option.getWithDefault(init.window, Window.window),
+      integrity: Option.getOr(init.integrity, ""),
+      keepalive: Option.getOr(init.keepalive, true),
+      method: Option.getOr(init.method, "GET"),
+      mode: Option.getOr(init.mode, "cors"),
+      redirect: Option.getOr(init.redirect, "follow"),
+      referer: Option.getOr(init.referer, ""),
+      refererPolicy: Option.getOr(init.refererPolicy, ""),
+      signal: Option.getOr(init.signal, AbortController.signal(AbortController.new())),
+      window: Option.getOr(init.window, Window.window),
     }
   }
 }
