@@ -100,7 +100,7 @@ There's still a good amount of bindings missing. Here's what's currently availab
 - [ ] HTTP Server
   - [x] Deno.serve
   - [ ] Deno.serveHttp
-- [ ] I/O
+- [x] I/O
 - [x] Network
   - [x] Deno.connect
   - [x] Deno.connectTls

@@ -2,6 +2,12 @@
 
 import * as PervasivesU from "rescript/lib/es6/pervasivesU.js";
 
+var ConsoleSize = {};
+
+var InspectOptions = {};
+
+var SetRawOptions = {};
+
 var SeekMode = {};
 
 var FileInfo = {};
@@ -259,7 +265,14 @@ var $$WebSocket = {};
 
 var WebSocketUpgrade = {};
 
+var Writer = {};
+
+var Reader = {};
+
 export {
+  ConsoleSize ,
+  InspectOptions ,
+  SetRawOptions ,
   SeekMode ,
   FileInfo ,
   FsFile ,
@@ -316,5 +329,7 @@ export {
   EventListenerOptions ,
   $$WebSocket ,
   WebSocketUpgrade ,
+  Writer ,
+  Reader ,
 }
 /* No side effect */
