@@ -17,8 +17,38 @@ type build = {
 @scope("Deno") @val external env: Env.t = "env"
 @scope("Deno") @val external exit: int => unit = "exit"
 
+module ConsoleSize = {
+  type t = {
+    columns: int,
+    rows: int,
+  }
+}
+
+module InspectOptions = {
+  type t = {
+    colors?: bool,
+    compact?: bool,
+    depth?: int,
+    breakLength?: int,
+    escapeSequences?: bool,
+    iterableLimit?: int,
+    showProxy?: bool,
+    sorted?: bool,
+    trailingComma?: bool,
+    getters?: bool,
+    showHidden?: bool,
+    strAbbreviateSize?: int,
+  }
+}
+@scope("Deno") @val external consoleSize: unit => ConsoleSize.t = "consoleSize"
+@scope("Deno") @val external inspect: ('a, ~options: InspectOptions.t=?) => string = "inspect"
+
+module SetRawOptions = {
+  type t = {cbreak: bool}
+}
+
 module SeekMode = {
-  type t = Start | Current | End
+  type t = | @int(0) Start | @int(1) Current | @int(2) End
 }
 
 module FileInfo = {
@@ -956,3 +986,26 @@ external upgradeWebSocket: (
   Request.t,
   ~options: UpgradeWebSocketOptions.t=?,
 ) => WebSocketUpgrade.t = "upgradeWebSocket"
+
+module Writer = {
+  type t = {writable: WritableStream.t<Uint8Array.t>}
+
+  @send external write: (t, Uint8Array.t) => Promise.t<int> = "write"
+  @send external writeSync: (t, Uint8Array.t) => int = "writeSync"
+  @send external close: t => unit = "close"
+  @send external isTerminal: t => bool = "isTerminal"
+}
+
+module Reader = {
+  type t = {readable: ReadableStream.t<Uint8Array.t>}
+
+  @send external read: (t, Uint8Array.t) => Promise.t<Js.Nullable.t<int>> = "read"
+  @send external readSync: (t, Uint8Array.t) => Js.Nullable.t<int> = "readSync"
+  @send external close: t => unit = "close"
+  @send external setRaw: (t, bool, ~options: SetRawOptions.t=?) => unit = "setRaw"
+  @send external isTerminal: t => bool = "isTerminal"
+}
+
+@scope("Deno") @val external stderr: Writer.t = "stderr"
+@scope("Deno") @val external stdout: Writer.t = "stdout"
+@scope("Deno") @val external stdin: Reader.t = "stdin"

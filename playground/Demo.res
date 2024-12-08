@@ -9,6 +9,13 @@ open Yaml
 // let secret = promptSecret(~message="Enter your password: ")
 // Console.log(secret)
 
+let obj = {
+  "a": 10,
+  "b": "hello",
+}
+
+Console.log(Deno.inspect(obj))
+
 Console.log(Path.join(["hello", "world"]))
 
 Console.log("Hello, world!")

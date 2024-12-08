@@ -11,6 +11,13 @@ import * as ModTs from "https://deno.land/std@0.212.0/assert/mod.ts";
 import * as TarTs from "https://deno.land/std@0.212.0/archive/tar.ts";
 import * as UntarTs from "https://deno.land/std@0.212.0/archive/untar.ts";
 
+var obj = {
+  a: 10,
+  b: "hello"
+};
+
+console.log(Deno.inspect(obj, undefined));
+
 console.log(Path.join("hello", "world"));
 
 console.log("Hello, world!");
@@ -29,7 +36,7 @@ var content = new TextEncoder().encode("hello");
 
 var b = new BufferTs.Buffer(content);
 
-var obj = {
+var obj$1 = {
   title: "TOML example",
   owner: {
     name: "Bob",
@@ -37,7 +44,7 @@ var obj = {
   }
 };
 
-console.log(Toml.stringify(obj, undefined));
+console.log(Toml.stringify(obj$1, undefined));
 
 console.log(b.empty());
 
@@ -226,7 +233,7 @@ export {
   tar ,
   content ,
   b ,
-  obj ,
+  obj$1 as obj,
   reader ,
   untar ,
   a ,
