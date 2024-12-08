@@ -9,6 +9,15 @@ open Yaml
 // let secret = promptSecret(~message="Enter your password: ")
 // Console.log(secret)
 
+let schedule: Deno.Schedule.t = String("* * * * *")
+let handler: Deno.CronHandler.t = Fn(
+  async () => {
+    Console.log("This will print once a minute")
+  },
+)
+
+Deno.cron("log a message", schedule->Deno.Schedule.unwrap, handler->Deno.CronHandler.unwrap)->ignore
+
 let obj = {
   "a": 10,
   "b": "hello",
@@ -21,6 +30,27 @@ Console.log(Path.join(["hello", "world"]))
 Console.log("Hello, world!")
 Console.log(Deno.env->Env.get("HOME"))
 Console.log(Deno.env->Env.has("PATH"))
+
+Console.log("Deno KV Demo:")
+
+let kv = await Deno.openKv()
+
+let prefs = {
+  "username": "ada",
+  "theme": "dark",
+  "language": "en-US",
+}
+
+let key: Deno.KvKey.t = [String("preferences"), String("ada")]
+
+Console.log(key->Deno.KvKey.unwrap)
+
+(await kv->Deno.Kv.set(~key=key->Deno.KvKey.unwrap, ~value=prefs))->ignore
+
+let entry = await kv->Deno.Kv.get(key->Deno.KvKey.unwrap)
+
+Console.log(entry)
+Console.log(entry.value)
 
 let yaml = `
   id: 1
