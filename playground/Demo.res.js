@@ -11,6 +11,20 @@ import * as ModTs from "https://deno.land/std@0.212.0/assert/mod.ts";
 import * as TarTs from "https://deno.land/std@0.212.0/archive/tar.ts";
 import * as UntarTs from "https://deno.land/std@0.212.0/archive/untar.ts";
 
+var schedule = {
+  TAG: "String",
+  _0: "* * * * *"
+};
+
+var handler = {
+  TAG: "Fn",
+  _0: (async function () {
+      console.log("This will print once a minute");
+    })
+};
+
+Deno.cron("log a message", Deno$TsirysndrRescriptDeno.Schedule.unwrap(schedule), Deno$TsirysndrRescriptDeno.CronHandler.unwrap(handler));
+
 var obj = {
   a: 10,
   b: "hello"
@@ -25,6 +39,37 @@ console.log("Hello, world!");
 console.log(Deno.env.get("HOME"));
 
 console.log(Deno.env.has("PATH"));
+
+console.log("Deno KV Demo:");
+
+var kv = await Deno.openKv(undefined);
+
+var prefs = {
+  username: "ada",
+  theme: "dark",
+  language: "en-US"
+};
+
+var key = [
+  {
+    TAG: "String",
+    _0: "preferences"
+  },
+  {
+    TAG: "String",
+    _0: "ada"
+  }
+];
+
+console.log(Deno$TsirysndrRescriptDeno.KvKey.unwrap(key));
+
+await kv.set(Deno$TsirysndrRescriptDeno.KvKey.unwrap(key), prefs, undefined);
+
+var entry = await kv.get(Deno$TsirysndrRescriptDeno.KvKey.unwrap(key), undefined);
+
+console.log(entry);
+
+console.log(entry.value);
 
 var yaml = "\n  id: 1\n  name: \"Alice\"\n";
 
@@ -229,6 +274,12 @@ var a = 1;
 var y = z;
 
 export {
+  schedule ,
+  handler ,
+  kv ,
+  prefs ,
+  key ,
+  entry ,
   yaml ,
   tar ,
   content ,

@@ -1009,3 +1009,334 @@ module Reader = {
 @scope("Deno") @val external stderr: Writer.t = "stderr"
 @scope("Deno") @val external stdout: Writer.t = "stdout"
 @scope("Deno") @val external stdin: Reader.t = "stdin"
+
+module IteratorResult = {
+  type t<'a>
+}
+
+module Symbol = {
+  type t
+}
+
+module KvU64 = {
+  type t = {value: int}
+  @new external new: int => t = "KvU64"
+}
+
+module CronScheduleExpression = {
+  type y =
+    | Number(int)
+    | NumberArray(array<int>)
+
+  type u = {exact: y}
+
+  type v = {
+    start?: int,
+    end?: int,
+    every?: int,
+  }
+
+  type t =
+    | Number(int)
+    | Exact(u)
+    | Range(v)
+
+  let unwrap = (expression: t) => {
+    switch expression {
+    | Number(value) => Obj.magic(value)
+    | Exact(value) =>
+      Obj.magic({
+        exact: switch value.exact {
+        | Number(value) => Obj.magic(value)
+        | NumberArray(value) => Obj.magic(value)
+        },
+      })
+    | Range(value) => Obj.magic(value)
+    }
+  }
+}
+
+module CronSchedule = {
+  type t = {
+    minute?: CronScheduleExpression.t,
+    hour?: CronScheduleExpression.t,
+    dayOfMonth?: CronScheduleExpression.t,
+    month?: CronScheduleExpression.t,
+    dayOfWeek?: CronScheduleExpression.t,
+  }
+
+  let unwrap = (schedule: t) => {
+    minute: switch schedule.minute {
+    | Some(minute) => minute->CronScheduleExpression.unwrap
+    | None => Obj.magic(undefined)
+    },
+    hour: switch schedule.hour {
+    | Some(hour) => hour->CronScheduleExpression.unwrap
+    | None => Obj.magic(undefined)
+    },
+    dayOfMonth: switch schedule.dayOfMonth {
+    | Some(dayOfMonth) => dayOfMonth->CronScheduleExpression.unwrap
+    | None => Obj.magic(undefined)
+    },
+    month: switch schedule.month {
+    | Some(month) => month->CronScheduleExpression.unwrap
+    | None => Obj.magic(undefined)
+    },
+    dayOfWeek: switch schedule.dayOfWeek {
+    | Some(dayOfWeek) => dayOfWeek->CronScheduleExpression.unwrap
+    | None => Obj.magic(undefined)
+    },
+  }
+}
+
+module KvConsistencyLevel = {
+  type t =
+    | Strong
+    | Eventual
+}
+
+module KvKeyPart = {
+  type t =
+    | String(string)
+    | Uint8Array(Uint8Array.t)
+    | Number(int)
+    | Boolean(bool)
+
+  let unwrap = (key: t) => {
+    switch key {
+    | String(value) => Obj.magic(value)
+    | Uint8Array(value) => Obj.magic(value)
+    | Number(value) => Obj.magic(value)
+    | Boolean(value) => Obj.magic(value)
+    }
+  }
+}
+
+module KvKey = {
+  type t = array<KvKeyPart.t>
+
+  let unwrap = (key: t) => {
+    key->Belt.Array.map(KvKeyPart.unwrap)->Belt.Array.map(Obj.magic)
+  }
+}
+
+module KvEntry = {
+  type t<'a> = {
+    key: KvKey.t,
+    value: 'a,
+    versionstamp: string,
+  }
+}
+
+module KvEntryMaybe = {
+  type u = {
+    key: KvKey.t,
+    value: Js.Nullable.t<string>,
+    versionstamp: Js.Nullable.t<string>,
+  }
+
+  type t<'a> = KvEntry(KvEntry.t<'a>) | Maybe(u)
+}
+
+module KvListIterator = {
+  type t = {cursor: string}
+
+  @send external next: t => Promise.t<IteratorResult.t<KvEntry.t<'a>>> = "next"
+}
+
+module KvListSelector = {
+  type prefix = {prefix: KvKey.t}
+  type prefixStart = {prefix: KvKey.t, start: KvKey.t}
+  type prefixEnd = {prefix: KvKey.t, end: KvKey.t}
+  type startEnd = {start: KvKey.t, end: KvKey.t}
+
+  type t =
+    | Prefix(prefix)
+    | PrefixStart(prefixStart)
+    | PrefixEnd(prefixEnd)
+    | StartEnd(startEnd)
+}
+
+module KvMutation = {
+  type set<'a> = {
+    key: KvKey.t,
+    @as("type")
+    type_: [#set],
+    value: 'a,
+    expireIn?: int,
+  }
+
+  type delete = {
+    key: KvKey.t,
+    @as("delete")
+    type_: [#delete],
+  }
+
+  type sum = {
+    key: KvKey.t,
+    @as("type")
+    type_: [#sum],
+    value: KvU64.t,
+  }
+
+  type max = {
+    key: KvKey.t,
+    @as("type")
+    type_: [#max],
+    value: KvU64.t,
+  }
+
+  type min = {
+    key: KvKey.t,
+    @as("type")
+    type_: [#max],
+    value: KvU64.t,
+  }
+
+  type t<'a> =
+    | Set(set<'a>)
+    | Delete(delete)
+    | Sum(sum)
+    | Max(max)
+    | Min(min)
+
+  let unwrap = (mutation: t<'a>) => {
+    switch mutation {
+    | Set(mutation) => Obj.magic(mutation)
+    | Delete(mutation) => Obj.magic(mutation)
+    | Sum(mutation) => Obj.magic(mutation)
+    | Max(mutation) => Obj.magic(mutation)
+    | Min(mutation) => Obj.magic(mutation)
+    }
+  }
+}
+
+module EnqueueOptions = {
+  type t = {
+    delay?: int,
+    keysIfUndelivered?: array<KvKey.t>,
+    backoffSchedule?: array<int>,
+  }
+}
+
+module KvCommitResult = {
+  type t = {
+    ok: bool,
+    versionstamp: string,
+  }
+}
+
+module KvGetOptions = {
+  type t = {consistency?: KvConsistencyLevel.t}
+}
+
+module KvListOptions = {
+  type t = {
+    limit?: int,
+    cursor?: string,
+    reverse?: bool,
+    consistency?: KvConsistencyLevel.t,
+    batchSize?: int,
+  }
+}
+
+module KvListenQueueHandler = {
+  type t<'a> =
+    | Fn('a => Promise.t<unit>)
+    | Void(unit)
+  let unwrap = (handler: t<'a>) => {
+    switch handler {
+    | Fn(handler) => Obj.magic(handler)
+    | Void(_) => ()
+    }
+  }
+}
+
+module KvSetOptions = {
+  type t = {expireInt?: int}
+}
+
+module KvWatchOptions = {
+  type t = {raw?: bool}
+}
+
+module AtomicCheck = {
+  type t = {
+    key: KvKey.t,
+    versionstamp: Js.Nullable.t<string>,
+  }
+}
+
+module AtomicOperation = {
+  type t
+
+  @send @variadic external check: (t, array<AtomicCheck.t>) => t = "check"
+  @send external commit: t => Promise.t<KvCommitResult.t> = "commit"
+  @send external delete: (t, KvKey.t) => t = "delete"
+  @send external enqueue: (t, 'a, ~options: EnqueueOptions.t=?) => t = "enqueue"
+  @send external max: (t, int) => t = "max"
+  @send external min: (t, int) => t = "min"
+  @send @variadic external mutate: (t, array<KvMutation.t<'a>>) => t = "mutate"
+  @send external set: (t, ~key: KvKey.t, ~value: 'a, ~options: KvSetOptions.t=?) => t = "set"
+  @send external sum: (t, KvKey.t, int) => t = "sum"
+}
+
+module Kv = {
+  type t
+
+  @send external atomic: t => AtomicOperation.t = "atomic"
+  @send external close: t => unit = "close"
+  @send external commitVersionstamp: t => Symbol.t = "commitVersionstamp"
+  @send external delete: (t, KvKey.t) => Promise.t<unit> = "delete"
+  @send
+  external enqueue: (t, 'a, ~options: EnqueueOptions.t=?) => Promise.t<KvCommitResult.t> = "enqueue"
+  @send
+  external get: (t, KvKey.t, ~options: KvGetOptions.t=?) => Promise.t<KvEntry.t<'a>> = "get"
+  @send
+  external getMany: (
+    t,
+    array<array<KvKey.t>>,
+    ~options: KvGetOptions.t=?,
+  ) => Promise.t<array<KvEntry.t<'a>>> = "getMany"
+  @send
+  external list: (t, KvListSelector.t, ~options: KvListOptions.t=?) => KvListIterator.t = "list"
+  @send external listenQueue: (t, KvListenQueueHandler.t<'a>) => Promise.t<unit> = "listenQueue"
+
+  @send
+  external set: (
+    t,
+    ~key: KvKey.t,
+    ~value: 'a,
+    ~options: KvSetOptions.t=?,
+  ) => Promise.t<KvCommitResult.t> = "set"
+  @send
+  external watch: (t, array<array<KvKey.t>>, ~options: KvWatchOptions.t=?) => ReadableStream.t<'a> =
+    "watch"
+}
+
+module Schedule = {
+  type t =
+    | String(string)
+    | CronSchedule(CronSchedule.t)
+
+  let unwrap = (schedule: t) => {
+    switch schedule {
+    | String(value) => Obj.magic(value)
+    | CronSchedule(value) => Obj.magic(value)
+    }
+  }
+}
+
+module CronHandler = {
+  type t = Fn(unit => Promise.t<unit>) | Void(unit)
+
+  let unwrap = (handler: t) => {
+    switch handler {
+    | Fn(handler) => Obj.magic(handler)
+    | Void(_) => Obj.magic()
+    }
+  }
+}
+
+@scope("Deno") external openKv: (~path: string=?) => Promise.t<Kv.t> = "openKv"
+@scope("Deno") external cron: (string, Schedule.t, CronHandler.t) => Promise.t<unit> = "cron"

@@ -70,6 +70,10 @@ There's still a good amount of bindings missing. Here's what's currently availab
 
 - [ ] Broadcast Channel
   - [ ] BroadcastChannel
+- [x] Cloud
+  - [x] Deno KV
+  - [x] Deno Cron
+  - [x] Deno Queue
 - [ ] Cache API
   - [ ] Cache
   - [ ] CacheStorage
