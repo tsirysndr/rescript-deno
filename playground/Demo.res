@@ -9,6 +9,15 @@ open Yaml
 // let secret = promptSecret(~message="Enter your password: ")
 // Console.log(secret)
 
+let desc: Deno.PermissionDescriptor.t = Read({
+  name: "read",
+  path: String("/etc"),
+})
+
+let status = await Deno.permissions->Deno.Permissions.query(desc->Deno.PermissionDescriptor.unwrap)
+Console.log("Read permission status:")
+Console.log(status.state)
+
 let schedule: Deno.Schedule.t = String("* * * * *")
 let handler: Deno.CronHandler.t = Fn(
   async () => {

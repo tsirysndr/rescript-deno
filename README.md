@@ -116,8 +116,8 @@ There's still a good amount of bindings missing. Here's what's currently availab
   - [x] Deno.startTls
 - [ ] Observability
 - [ ] Performance
-- [ ] Permissions
-- [ ] Runtime Environment
+- [x] Permissions
+- [x] Runtime Environment
   - [x] Deno.version
   - [x] Deno.pid
   - [x] Deno.ppid
