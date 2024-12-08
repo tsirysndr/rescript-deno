@@ -860,3 +860,99 @@ module Telemetry = {
     @send external shutdown: t => Promise.t<unit> = "shutdown"
   }
 }
+
+module UpgradeWebSocketOptions = {
+  type t = {
+    protocol?: string,
+    idleTimeout?: int,
+  }
+}
+
+module BinaryType = {
+  type t =
+    | Arraybuffer
+    | Blob
+}
+
+module ArrayBufferLike = {
+  type t
+}
+
+module Blob = {
+  type t = {
+    size: int,
+    @as("type")
+    type_: string,
+  }
+
+  @send external arrayBuffer: t => Promise.t<ArrayBuffer.t> = "arrayBuffer"
+  @send external bytes: t => Uint8Array.t = "bytes"
+  @send external slice: (t, ~start: int=?, ~end: int=?, ~contentType: string=?) => t = "slice"
+  @send external stream: t => ReadableStream.t<Uint8Array.t> = "stream"
+  @send external text: t => Promise.t<string> = "text"
+}
+
+module ArrayBufferView = {
+  type t
+}
+
+module WebSocketData = {
+  type t =
+    | String(string)
+    | ArrayBufferLike(ArrayBufferLike.t)
+    | Blob(Blob.t)
+    | ArrayBufferView(ArrayBufferView.t)
+}
+
+module AddEventListenerOptions = {
+  type t = {
+    once?: bool,
+    passive?: bool,
+    signal?: AbortSignal.t,
+  }
+}
+
+module EventListenerOptions = {
+  type t = {capture?: bool}
+}
+
+module WebSocket = {
+  type t = {
+    binaryType: BinaryType.t,
+    bufferedAmount: int,
+    extensions: string,
+    protocol: string,
+    readyState: int,
+    url: string,
+    @as("CLOSED")
+    closed: int,
+    @as("CLOSING")
+    closing: int,
+    @as("CONNECTING")
+    connecting: int,
+    @as("OPEN")
+    open_: int,
+  }
+
+  @send external close: (t, ~code: int=?, ~reason: string=?) => unit = "close"
+  @send external send: (t, WebSocketData.t) => unit = "send"
+  @send
+  external addEventListener: (t, 'a, 'b, ~options: AddEventListenerOptions.t=?) => unit =
+    "addEventListener"
+  @send
+  external removeEventListener: (t, 'a, 'b, ~options: EventListenerOptions.t=?) => unit =
+    "removeEventListener"
+}
+
+module WebSocketUpgrade = {
+  type t = {
+    response: Response.t,
+    socker: WebSocket.t,
+  }
+}
+
+@scope("Deno")
+external upgradeWebSocket: (
+  Request.t,
+  ~options: UpgradeWebSocketOptions.t=?,
+) => WebSocketUpgrade.t = "upgradeWebSocket"

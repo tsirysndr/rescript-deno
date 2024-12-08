@@ -239,6 +239,26 @@ var Telemetry = {
   SpanExporter: SpanExporter
 };
 
+var UpgradeWebSocketOptions = {};
+
+var BinaryType = {};
+
+var ArrayBufferLike = {};
+
+var $$Blob = {};
+
+var ArrayBufferView = {};
+
+var WebSocketData = {};
+
+var AddEventListenerOptions = {};
+
+var EventListenerOptions = {};
+
+var $$WebSocket = {};
+
+var WebSocketUpgrade = {};
+
 export {
   SeekMode ,
   FileInfo ,
@@ -286,5 +306,15 @@ export {
   serveWithUnixOptions ,
   serveWithTlsOptions ,
   Telemetry ,
+  UpgradeWebSocketOptions ,
+  BinaryType ,
+  ArrayBufferLike ,
+  $$Blob ,
+  ArrayBufferView ,
+  WebSocketData ,
+  AddEventListenerOptions ,
+  EventListenerOptions ,
+  $$WebSocket ,
+  WebSocketUpgrade ,
 }
 /* No side effect */
