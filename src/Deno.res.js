@@ -473,6 +473,125 @@ var $$PermissionStatus = {};
 
 var $$Permissions = {};
 
+var BenchContext = {};
+
+function unwrap$13(permission) {
+  var match = permission.env;
+  var tmp;
+  tmp = match !== undefined ? (
+      typeof match !== "object" ? "inherit" : match._0
+    ) : undefined;
+  var match$1 = permission.ffi;
+  var tmp$1;
+  tmp$1 = match$1 !== undefined ? (
+      typeof match$1 !== "object" ? "inherit" : match$1._0
+    ) : undefined;
+  var match$2 = permission.import;
+  var tmp$2;
+  tmp$2 = match$2 !== undefined ? (
+      typeof match$2 !== "object" ? "inherit" : match$2._0
+    ) : undefined;
+  var match$3 = permission.net;
+  var tmp$3;
+  tmp$3 = match$3 !== undefined ? (
+      typeof match$3 !== "object" ? "inherit" : match$3._0
+    ) : undefined;
+  var match$4 = permission.read;
+  var tmp$4;
+  tmp$4 = match$4 !== undefined ? (
+      typeof match$4 !== "object" ? "inherit" : match$4._0
+    ) : undefined;
+  var match$5 = permission.run;
+  var tmp$5;
+  tmp$5 = match$5 !== undefined ? (
+      typeof match$5 !== "object" ? "inherit" : match$5._0
+    ) : undefined;
+  var match$6 = permission.sys;
+  var tmp$6;
+  tmp$6 = match$6 !== undefined ? (
+      typeof match$6 !== "object" ? "inherit" : match$6._0
+    ) : undefined;
+  var match$7 = permission.write;
+  var tmp$7;
+  tmp$7 = match$7 !== undefined ? (
+      typeof match$7 !== "object" ? "inherit" : match$7._0
+    ) : undefined;
+  return {
+          env: tmp,
+          ffi: tmp$1,
+          import: tmp$2,
+          net: tmp$3,
+          read: tmp$4,
+          run: tmp$5,
+          sys: tmp$6,
+          write: tmp$7
+        };
+}
+
+var PermissionsObject = {
+  unwrap: unwrap$13
+};
+
+function unwrap$14(options) {
+  if (typeof options !== "object") {
+    if (options === "Inherit") {
+      return "inherit";
+    } else {
+      return "none";
+    }
+  } else {
+    return unwrap$13(options._0);
+  }
+}
+
+var PermissionsOptions = {
+  unwrap: unwrap$14
+};
+
+function unwrap$15(definition) {
+  var value = definition.ignore;
+  var value$1 = definition.group;
+  var value$2 = definition.baseline;
+  var value$3 = definition.only;
+  var value$4 = definition.sanitizeExit;
+  var permissions = definition.permissions;
+  return {
+          name: definition.name,
+          fn: definition.fn._0,
+          ignore: value !== undefined ? value : undefined,
+          group: value$1 !== undefined ? value$1 : undefined,
+          baseline: value$2 !== undefined ? value$2 : undefined,
+          only: value$3 !== undefined ? value$3 : undefined,
+          sanitizeExit: value$4 !== undefined ? value$4 : undefined,
+          permissions: permissions !== undefined ? unwrap$14(permissions) : undefined
+        };
+}
+
+var BenchDefinition = {
+  unwrap: unwrap$15
+};
+
+function unwrap$16(definition) {
+  var value = definition.ignore;
+  return {
+          name: definition.name,
+          fn: definition.fn._0,
+          ignore: value !== undefined ? value : undefined
+        };
+}
+
+var TestDefinition = {
+  unwrap: unwrap$16
+};
+
+function test(d) {
+  Deno.test(unwrap$16(d));
+}
+
+function bench(b) {
+  Deno.bench(unwrap$15(b));
+}
+
 export {
   ConsoleSize ,
   InspectOptions ,
@@ -571,5 +690,12 @@ export {
   PermissionState ,
   $$PermissionStatus ,
   $$Permissions ,
+  BenchContext ,
+  PermissionsObject ,
+  PermissionsOptions ,
+  BenchDefinition ,
+  TestDefinition ,
+  test ,
+  bench ,
 }
 /* No side effect */
