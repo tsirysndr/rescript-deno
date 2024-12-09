@@ -1,7 +1,7 @@
 module Types = {
   module Reader = {
     type t
-    @module("https://deno.land/std@0.212.0/io/types.ts")
+    @module("jsr:@std/io/types")
     external read: Uint8Array.t => Promise.t<option<int>> = "read"
   }
 }
@@ -9,7 +9,7 @@ module Types = {
 module Buffer = {
   type t
 
-  @new @module("https://deno.land/std@0.212.0/io/buffer.ts")
+  @new @module("jsr:@std/io")
   external new: Uint8Array.t => t = "Buffer"
 
   @send external empty: t => bool = "empty"
