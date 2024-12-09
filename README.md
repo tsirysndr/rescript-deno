@@ -68,8 +68,8 @@ See [playground](playground) directory in this repo for more examples.
 
 There's still a good amount of bindings missing. Here's what's currently available:
 
-- [ ] Broadcast Channel
-  - [ ] BroadcastChannel
+- [x] Broadcast Channel
+  - [x] BroadcastChannel
 - [x] Cloud
   - [x] Deno KV
   - [x] Deno Cron

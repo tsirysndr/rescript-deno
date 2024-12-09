@@ -426,6 +426,14 @@ function $$fetch$1(input, init) {
   }
 }
 
+var AddEventListenerOptions = {};
+
+var EventListenerOptions = {};
+
+var $$MessageEvent = {};
+
+var $$BroadcastChannel = {};
+
 export {
   $$EventTarget ,
   $$Event ,
@@ -482,5 +490,9 @@ export {
   $$Response$1 as $$Response,
   FetchRequestInput ,
   $$fetch$1 as $$fetch,
+  AddEventListenerOptions ,
+  EventListenerOptions ,
+  $$MessageEvent ,
+  $$BroadcastChannel ,
 }
 /* No side effect */
