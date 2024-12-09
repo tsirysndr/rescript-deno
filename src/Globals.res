@@ -967,3 +967,49 @@ let fetch = (input: FetchRequestInput.t, ~init: option<RequestInit.t<'a, 'b>>=?)
   | (String(input), None) => _fetch(input)
   }
 }
+
+module AddEventListenerOptions = {
+  type t = {
+    once?: bool,
+    passive?: bool,
+    signal?: AbortSignal.t,
+  }
+}
+
+module EventListenerOptions = {
+  type t = {capture?: bool}
+}
+
+module MessageEvent = {
+  type t<'a> = {
+    data: 'a,
+    lastEventId: string,
+    origin: string,
+    @as("type")
+    type_: string,
+    target: Js.Nullable.t<EventTarget.t>,
+    currentTarget: Js.Nullable.t<EventTarget.t>,
+    eventPhase: int,
+    bubbles: bool,
+    cancelable: bool,
+    defaultPrevented: bool,
+    composed: bool,
+  }
+}
+
+module BroadcastChannel = {
+  type t<'a> = {
+    name: string,
+    mutable onmessage: MessageEvent.t<'a> => unit,
+    mutable onmessageerror: 'a => unit,
+  }
+
+  @new external new: string => t<'a> = "BroadcastChannel"
+  @send external close: t<'a> => unit = "close"
+  @send external postMessage: (t<'a>, 'a) => unit = "postMessage"
+  external addEventListener: (t<'a>, 'b, 'c, ~options: AddEventListenerOptions.t=?) => unit =
+    "addEventListener"
+  @send
+  external removeEventListener: (t<'a>, 'b, 'c, ~options: EventListenerOptions.t=?) => unit =
+    "removeEventListener"
+}
