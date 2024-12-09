@@ -338,14 +338,44 @@ var KvEntryMaybe = {};
 
 var KvListIterator = {};
 
-var KvListSelector = {};
+function unwrap$4(selector) {
+  switch (selector.TAG) {
+    case "Prefix" :
+        return {
+                prefix: unwrap$3(selector._0.prefix)
+              };
+    case "PrefixStart" :
+        var selector$1 = selector._0;
+        return {
+                prefix: unwrap$3(selector$1.prefix),
+                start: unwrap$3(selector$1.start)
+              };
+    case "PrefixEnd" :
+        var selector$2 = selector._0;
+        return {
+                prefix: unwrap$3(selector$2.prefix),
+                end: unwrap$3(selector$2.end)
+              };
+    case "StartEnd" :
+        var selector$3 = selector._0;
+        return {
+                start: unwrap$3(selector$3.start),
+                end: unwrap$3(selector$3.end)
+              };
+    
+  }
+}
 
-function unwrap$4(mutation) {
+var KvListSelector = {
+  unwrap: unwrap$4
+};
+
+function unwrap$5(mutation) {
   return mutation._0;
 }
 
 var KvMutation = {
-  unwrap: unwrap$4
+  unwrap: unwrap$5
 };
 
 var EnqueueOptions = {};
@@ -356,7 +386,7 @@ var KvGetOptions = {};
 
 var KvListOptions = {};
 
-function unwrap$5(handler) {
+function unwrap$6(handler) {
   if (handler.TAG === "Fn") {
     return handler._0;
   }
@@ -364,7 +394,7 @@ function unwrap$5(handler) {
 }
 
 var KvListenQueueHandler = {
-  unwrap: unwrap$5
+  unwrap: unwrap$6
 };
 
 var KvSetOptions = {};
@@ -375,17 +405,54 @@ var AtomicCheck = {};
 
 var AtomicOperation = {};
 
-var Kv = {};
+function $$delete(kv, key) {
+  return kv.delete(unwrap$3(key));
+}
 
-function unwrap$6(schedule) {
+function get(kv, key, options) {
+  return kv.get(unwrap$3(key), options);
+}
+
+function getMany(kv, keys, options) {
+  var processKey = function (key) {
+    return key.map(unwrap$3);
+  };
+  return kv.getMany(keys.map(processKey), options);
+}
+
+function list(kv, selector, options) {
+  return kv.list(unwrap$4(selector), options);
+}
+
+function set(kv, key, value, options) {
+  return kv.set(unwrap$3(key), value, options);
+}
+
+function watch(kv, keys, options) {
+  var processKey = function (key) {
+    return key.map(unwrap$3);
+  };
+  return kv.watch(keys.map(processKey), options);
+}
+
+var Kv = {
+  $$delete: $$delete,
+  get: get,
+  getMany: getMany,
+  list: list,
+  set: set,
+  watch: watch
+};
+
+function unwrap$7(schedule) {
   return schedule._0;
 }
 
 var Schedule = {
-  unwrap: unwrap$6
+  unwrap: unwrap$7
 };
 
-function unwrap$7(handler) {
+function unwrap$8(handler) {
   if (handler.TAG === "Fn") {
     return handler._0;
   }
@@ -393,10 +460,14 @@ function unwrap$7(handler) {
 }
 
 var CronHandler = {
-  unwrap: unwrap$7
+  unwrap: unwrap$8
 };
 
-function unwrap$8(descriptor) {
+function cron(name, schedule, handler) {
+  return Deno.cron(name, schedule._0, unwrap$8(handler));
+}
+
+function unwrap$9(descriptor) {
   var match = descriptor.command;
   return {
           name: descriptor.name,
@@ -405,18 +476,6 @@ function unwrap$8(descriptor) {
 }
 
 var RunPermissionDescriptor = {
-  unwrap: unwrap$8
-};
-
-function unwrap$9(descriptor) {
-  var match = descriptor.path;
-  return {
-          name: descriptor.name,
-          path: match !== undefined ? match._0 : undefined
-        };
-}
-
-var ReadPermissionDescriptor = {
   unwrap: unwrap$9
 };
 
@@ -428,15 +487,9 @@ function unwrap$10(descriptor) {
         };
 }
 
-var WritePermissionDescriptor = {
+var ReadPermissionDescriptor = {
   unwrap: unwrap$10
 };
-
-var NetPermissionDescriptor = {};
-
-var EnvPermissionDescriptor = {};
-
-var SysPermissionDescriptor = {};
 
 function unwrap$11(descriptor) {
   var match = descriptor.path;
@@ -446,36 +499,85 @@ function unwrap$11(descriptor) {
         };
 }
 
-var FfiPermissionDescriptor = {
+var WritePermissionDescriptor = {
   unwrap: unwrap$11
 };
 
+var NetPermissionDescriptor = {};
+
+var EnvPermissionDescriptor = {};
+
+var SysPermissionDescriptor = {};
+
 function unwrap$12(descriptor) {
+  var match = descriptor.path;
+  return {
+          name: descriptor.name,
+          path: match !== undefined ? match._0 : undefined
+        };
+}
+
+var FfiPermissionDescriptor = {
+  unwrap: unwrap$12
+};
+
+function unwrap$13(descriptor) {
   switch (descriptor.TAG) {
     case "Run" :
-        return unwrap$8(descriptor._0);
-    case "Read" :
         return unwrap$9(descriptor._0);
+    case "Read" :
+        return unwrap$10(descriptor._0);
     case "Ffi" :
-        return unwrap$11(descriptor._0);
+        return unwrap$12(descriptor._0);
     default:
       return descriptor._0;
   }
 }
 
 var PermissionDescriptor = {
-  unwrap: unwrap$12
+  unwrap: unwrap$13
 };
 
 var PermissionState = {};
 
 var $$PermissionStatus = {};
 
-var $$Permissions = {};
+function query(permissions, descriptor) {
+  return permissions.query(unwrap$13(descriptor));
+}
+
+function querySync(permissions, descriptor) {
+  return permissions.querySync(unwrap$13(descriptor));
+}
+
+function request(permissions, descriptor) {
+  return permissions.request(unwrap$13(descriptor));
+}
+
+function requestSync(permissions, descriptor) {
+  return permissions.requestSync(unwrap$13(descriptor));
+}
+
+function revoke(permissions, descriptor) {
+  return permissions.revoke(unwrap$13(descriptor));
+}
+
+function revokeAsync(permissions, descriptor) {
+  return permissions.revokeSync(unwrap$13(descriptor));
+}
+
+var $$Permissions = {
+  query: query,
+  querySync: querySync,
+  request: request,
+  requestSync: requestSync,
+  revoke: revoke,
+  revokeAsync: revokeAsync
+};
 
 var BenchContext = {};
 
-function unwrap$13(permission) {
+function unwrap$14(permission) {
   var match = permission.env;
   var tmp;
   tmp = match !== undefined ? (
@@ -529,10 +631,10 @@ function unwrap$13(permission) {
 }
 
 var PermissionsObject = {
-  unwrap: unwrap$13
+  unwrap: unwrap$14
 };
 
-function unwrap$14(options) {
+function unwrap$15(options) {
   if (typeof options !== "object") {
     if (options === "Inherit") {
       return "inherit";
@@ -540,15 +642,15 @@ function unwrap$14(options) {
       return "none";
     }
   } else {
-    return unwrap$13(options._0);
+    return unwrap$14(options._0);
   }
 }
 
 var PermissionsOptions = {
-  unwrap: unwrap$14
+  unwrap: unwrap$15
 };
 
-function unwrap$15(definition) {
+function unwrap$16(definition) {
   var value = definition.ignore;
   var value$1 = definition.group;
   var value$2 = definition.baseline;
@@ -563,15 +665,15 @@ function unwrap$15(definition) {
           baseline: value$2 !== undefined ? value$2 : undefined,
           only: value$3 !== undefined ? value$3 : undefined,
           sanitizeExit: value$4 !== undefined ? value$4 : undefined,
-          permissions: permissions !== undefined ? unwrap$14(permissions) : undefined
+          permissions: permissions !== undefined ? unwrap$15(permissions) : undefined
         };
 }
 
 var BenchDefinition = {
-  unwrap: unwrap$15
+  unwrap: unwrap$16
 };
 
-function unwrap$16(definition) {
+function unwrap$17(definition) {
   var value = definition.ignore;
   return {
           name: definition.name,
@@ -581,15 +683,15 @@ function unwrap$16(definition) {
 }
 
 var TestDefinition = {
-  unwrap: unwrap$16
+  unwrap: unwrap$17
 };
 
 function test(d) {
-  Deno.test(unwrap$16(d));
+  Deno.test(unwrap$17(d));
 }
 
 function bench(b) {
-  Deno.bench(unwrap$15(b));
+  Deno.bench(unwrap$16(b));
 }
 
 export {
@@ -679,6 +781,7 @@ export {
   Kv ,
   Schedule ,
   CronHandler ,
+  cron ,
   RunPermissionDescriptor ,
   ReadPermissionDescriptor ,
   WritePermissionDescriptor ,

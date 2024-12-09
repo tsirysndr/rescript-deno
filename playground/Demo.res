@@ -14,7 +14,7 @@ let desc: Deno.PermissionDescriptor.t = Read({
   path: String("/etc"),
 })
 
-let status = await Deno.permissions->Deno.Permissions.query(desc->Deno.PermissionDescriptor.unwrap)
+let status = await Deno.permissions->Deno.Permissions.query(desc)
 Console.log("Read permission status:")
 Console.log(status.state)
 
@@ -25,7 +25,7 @@ let handler: Deno.CronHandler.t = Fn(
   },
 )
 
-Deno.cron("log a message", schedule->Deno.Schedule.unwrap, handler->Deno.CronHandler.unwrap)->ignore
+Deno.cron("log a message", schedule, handler)->ignore
 
 let obj = {
   "a": 10,
@@ -54,9 +54,9 @@ let key: Deno.KvKey.t = [String("preferences"), String("ada")]
 
 Console.log(key->Deno.KvKey.unwrap)
 
-(await kv->Deno.Kv.set(~key=key->Deno.KvKey.unwrap, ~value=prefs))->ignore
+(await kv->Deno.Kv.set(~key, ~value=prefs))->ignore
 
-let entry = await kv->Deno.Kv.get(key->Deno.KvKey.unwrap)
+let entry = await kv->Deno.Kv.get(key)
 
 Console.log(entry)
 Console.log(entry.value)

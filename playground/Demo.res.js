@@ -22,7 +22,7 @@ var desc = {
   }
 };
 
-var status = await Deno.permissions.query(Deno$TsirysndrRescriptDeno.PermissionDescriptor.unwrap(desc));
+var status = await Deno$TsirysndrRescriptDeno.$$Permissions.query(Deno.permissions, desc);
 
 console.log("Read permission status:");
 
@@ -40,7 +40,7 @@ var handler = {
     })
 };
 
-Deno.cron("log a message", Deno$TsirysndrRescriptDeno.Schedule.unwrap(schedule), Deno$TsirysndrRescriptDeno.CronHandler.unwrap(handler));
+Deno$TsirysndrRescriptDeno.cron("log a message", schedule, handler);
 
 var obj = {
   a: 10,
@@ -80,9 +80,9 @@ var key = [
 
 console.log(Deno$TsirysndrRescriptDeno.KvKey.unwrap(key));
 
-await kv.set(Deno$TsirysndrRescriptDeno.KvKey.unwrap(key), prefs, undefined);
+await Deno$TsirysndrRescriptDeno.Kv.set(kv, key, prefs, undefined);
 
-var entry = await kv.get(Deno$TsirysndrRescriptDeno.KvKey.unwrap(key), undefined);
+var entry = await Deno$TsirysndrRescriptDeno.Kv.get(kv, key, undefined);
 
 console.log(entry);
 

@@ -1155,6 +1155,29 @@ module KvListSelector = {
     | PrefixStart(prefixStart)
     | PrefixEnd(prefixEnd)
     | StartEnd(startEnd)
+
+  let unwrap = (selector: t) =>
+    switch selector {
+    | Prefix(selector) =>
+      Obj.magic({
+        prefix: selector.prefix->KvKey.unwrap,
+      })
+    | PrefixStart(selector) =>
+      Obj.magic({
+        prefix: selector.prefix->KvKey.unwrap,
+        start: selector.start->KvKey.unwrap,
+      })
+    | PrefixEnd(selector) =>
+      Obj.magic({
+        prefix: selector.prefix->KvKey.unwrap,
+        end: selector.end->KvKey.unwrap,
+      })
+    | StartEnd(selector) =>
+      Obj.magic({
+        start: selector.start->KvKey.unwrap,
+        end: selector.end->KvKey.unwrap,
+      })
+    }
 }
 
 module KvMutation = {
@@ -1287,31 +1310,57 @@ module Kv = {
   @send external atomic: t => AtomicOperation.t = "atomic"
   @send external close: t => unit = "close"
   @send external commitVersionstamp: t => Symbol.t = "commitVersionstamp"
-  @send external delete: (t, KvKey.t) => Promise.t<unit> = "delete"
+  @send external _delete: (t, KvKey.t) => Promise.t<unit> = "delete"
   @send
   external enqueue: (t, 'a, ~options: EnqueueOptions.t=?) => Promise.t<KvCommitResult.t> = "enqueue"
   @send
-  external get: (t, KvKey.t, ~options: KvGetOptions.t=?) => Promise.t<KvEntry.t<'a>> = "get"
+  external _get: (t, KvKey.t, ~options: option<KvGetOptions.t>=?) => Promise.t<KvEntry.t<'a>> =
+    "get"
   @send
-  external getMany: (
+  external _getMany: (
     t,
     array<array<KvKey.t>>,
-    ~options: KvGetOptions.t=?,
+    ~options: option<KvGetOptions.t>=?,
   ) => Promise.t<array<KvEntry.t<'a>>> = "getMany"
   @send
-  external list: (t, KvListSelector.t, ~options: KvListOptions.t=?) => KvListIterator.t = "list"
-  @send external listenQueue: (t, KvListenQueueHandler.t<'a>) => Promise.t<unit> = "listenQueue"
+  external _list: (t, KvListSelector.t, ~options: option<KvListOptions.t>=?) => KvListIterator.t =
+    "list"
+  @send external _listenQueue: (t, KvListenQueueHandler.t<'a>) => Promise.t<unit> = "listenQueue"
 
   @send
-  external set: (
+  external _set: (
     t,
-    ~key: KvKey.t,
-    ~value: 'a,
-    ~options: KvSetOptions.t=?,
+    KvKey.t,
+    'a,
+    ~options: option<KvSetOptions.t>=?,
   ) => Promise.t<KvCommitResult.t> = "set"
   @send
-  external watch: (t, array<array<KvKey.t>>, ~options: KvWatchOptions.t=?) => ReadableStream.t<'a> =
-    "watch"
+  external _watch: (
+    t,
+    array<array<KvKey.t>>,
+    ~options: option<KvWatchOptions.t>=?,
+  ) => ReadableStream.t<'a> = "watch"
+
+  let delete = (kv: t, key: KvKey.t) => _delete(kv, key->KvKey.unwrap)
+
+  let get = (kv: t, key: KvKey.t, ~options: option<KvGetOptions.t>=?) =>
+    _get(kv, key->KvKey.unwrap, ~options)
+
+  let getMany = (kv: t, keys: array<array<KvKey.t>>, ~options: option<KvGetOptions.t>=?) => {
+    let processKey = (key: array<KvKey.t>) => key->Array.map(KvKey.unwrap)
+    _getMany(kv, keys->Array.map(processKey), ~options)
+  }
+
+  let list = (kv: t, selector: KvListSelector.t, ~options: option<KvListOptions.t>=?) =>
+    _list(kv, selector->KvListSelector.unwrap, ~options)
+
+  let set = (kv: t, ~key: KvKey.t, ~value: 'a, ~options: option<KvSetOptions.t>=?) =>
+    _set(kv, key->KvKey.unwrap, value, ~options)
+
+  let watch = (kv: t, keys: array<array<KvKey.t>>, ~options: option<KvWatchOptions.t>=?) => {
+    let processKey = (key: array<KvKey.t>) => key->Array.map(KvKey.unwrap)
+    _watch(kv, keys->Array.map(processKey), ~options)
+  }
 }
 
 module Schedule = {
@@ -1339,7 +1388,10 @@ module CronHandler = {
 }
 
 @scope("Deno") external openKv: (~path: string=?) => Promise.t<Kv.t> = "openKv"
-@scope("Deno") external cron: (string, Schedule.t, CronHandler.t) => Promise.t<unit> = "cron"
+@scope("Deno") external _cron: (string, Schedule.t, CronHandler.t) => Promise.t<unit> = "cron"
+@scope("Deno")
+let cron = (name: string, schedule: Schedule.t, handler: CronHandler.t) =>
+  _cron(name, schedule->Schedule.unwrap, handler->CronHandler.unwrap)
 
 module RunPermissionDescriptor = {
   type c = String(string) | URL(URL.t)
@@ -1501,12 +1553,30 @@ module PermissionStatus = {
 module Permissions = {
   type t
 
-  @send external query: (t, PermissionDescriptor.t) => Promise.t<PermissionStatus.t> = "query"
-  @send external querySync: (t, PermissionDescriptor.t) => PermissionStatus.t = "querySync"
-  @send external request: (t, PermissionDescriptor.t) => Promise.t<PermissionStatus.t> = "request"
-  @send external requestSync: (t, PermissionDescriptor.t) => PermissionStatus.t = "requestSync"
-  @send external revoke: (t, PermissionDescriptor.t) => Promise.t<PermissionStatus.t> = "revoke"
-  @send external revokeSync: (t, PermissionDescriptor.t) => PermissionStatus.t = "revokeSync"
+  @send external _query: (t, PermissionDescriptor.t) => Promise.t<PermissionStatus.t> = "query"
+  @send external _querySync: (t, PermissionDescriptor.t) => PermissionStatus.t = "querySync"
+  @send external _request: (t, PermissionDescriptor.t) => Promise.t<PermissionStatus.t> = "request"
+  @send external _requestSync: (t, PermissionDescriptor.t) => PermissionStatus.t = "requestSync"
+  @send external _revoke: (t, PermissionDescriptor.t) => Promise.t<PermissionStatus.t> = "revoke"
+  @send external _revokeSync: (t, PermissionDescriptor.t) => PermissionStatus.t = "revokeSync"
+
+  let query = (permissions, descriptor) =>
+    permissions->_query(descriptor->PermissionDescriptor.unwrap)
+
+  let querySync = (permissions, descriptor) =>
+    permissions->_querySync(descriptor->PermissionDescriptor.unwrap)
+
+  let request = (permissions, descriptor) =>
+    permissions->_request(descriptor->PermissionDescriptor.unwrap)
+
+  let requestSync = (permissions, descriptor) =>
+    permissions->_requestSync(descriptor->PermissionDescriptor.unwrap)
+
+  let revoke = (permissions, descriptor) =>
+    permissions->_revoke(descriptor->PermissionDescriptor.unwrap)
+
+  let revokeAsync = (permissions, descriptor) =>
+    permissions->_revokeSync(descriptor->PermissionDescriptor.unwrap)
 }
 
 @scope("Deno") @val external permissions: Permissions.t = "permissions"
