@@ -133,9 +133,9 @@ There's still a good amount of bindings missing. Here's what's currently availab
   - [x] Deno.ChildProcess
   - [x] Deno.Command
   - [x] Deno.kill
-- [ ] Testing
-  - [ ] Deno.test
-  - [ ] Deno.bench
+- [x] Testing
+  - [x] Deno.test
+  - [x] Deno.bench
 - [ ] Timers
 - [ ] Typed Arrays
 - [ ] Web APIs

@@ -1510,3 +1510,214 @@ module Permissions = {
 }
 
 @scope("Deno") @val external permissions: Permissions.t = "permissions"
+
+module BenchContext = {
+  type t = {
+    name: string,
+    origin: string,
+  }
+
+  @send external start: t => unit = "start"
+  @send external end: t => unit = "end"
+}
+
+module PermissionsObject = {
+  type env =
+    | Inherit
+    | Boolean(bool)
+    | StringArray(array<string>)
+
+  type ffi =
+    | Inherit
+    | Boolean(bool)
+    | StringArray(array<string>)
+    | UrlArray(array<URL.t>)
+
+  type import =
+    | Inherit
+    | Boolean(bool)
+    | StringArray(array<string>)
+
+  type net =
+    | Inherit
+    | Boolean(bool)
+    | StringArray(array<string>)
+
+  type read =
+    | Inherit
+    | Boolean(bool)
+    | StringArray(array<string>)
+    | UrlArray(array<URL.t>)
+
+  type run =
+    | Inherit
+    | Boolean(bool)
+    | StringArray(array<string>)
+    | UrlArray(array<URL.t>)
+
+  type sys =
+    | Inherit
+    | Boolean(bool)
+    | StringArray(array<string>)
+
+  type write =
+    | Inherit
+    | Boolean(bool)
+    | StringArray(array<string>)
+    | UrlArray(array<URL.t>)
+
+  type t = {
+    env?: env,
+    ffi?: ffi,
+    import?: import,
+    net?: net,
+    read?: read,
+    run?: run,
+    sys?: sys,
+    write?: write,
+  }
+
+  let unwrap = permission =>
+    Obj.magic({
+      env: switch permission.env {
+      | Some(Inherit) => Obj.magic("inherit")
+      | Some(Boolean(value)) => Obj.magic(value)
+      | Some(StringArray(value)) => Obj.magic(value)
+      | None => Obj.magic(undefined)
+      },
+      ffi: switch permission.ffi {
+      | Some(Inherit) => Obj.magic("inherit")
+      | Some(Boolean(value)) => Obj.magic(value)
+      | Some(StringArray(value)) => Obj.magic(value)
+      | Some(UrlArray(value)) => Obj.magic(value)
+      | None => Obj.magic(undefined)
+      },
+      import: switch permission.import {
+      | Some(Inherit) => Obj.magic("inherit")
+      | Some(Boolean(value)) => Obj.magic(value)
+      | Some(StringArray(value)) => Obj.magic(value)
+      | None => Obj.magic(undefined)
+      },
+      net: switch permission.net {
+      | Some(Inherit) => Obj.magic("inherit")
+      | Some(Boolean(value)) => Obj.magic(value)
+      | Some(StringArray(value)) => Obj.magic(value)
+      | None => Obj.magic(undefined)
+      },
+      read: switch permission.read {
+      | Some(Inherit) => Obj.magic("inherit")
+      | Some(Boolean(value)) => Obj.magic(value)
+      | Some(StringArray(value)) => Obj.magic(value)
+      | Some(UrlArray(value)) => Obj.magic(value)
+      | None => Obj.magic(undefined)
+      },
+      run: switch permission.run {
+      | Some(Inherit) => Obj.magic("inherit")
+      | Some(Boolean(value)) => Obj.magic(value)
+      | Some(StringArray(value)) => Obj.magic(value)
+      | Some(UrlArray(value)) => Obj.magic(value)
+      | None => Obj.magic(undefined)
+      },
+      sys: switch permission.sys {
+      | Some(Inherit) => Obj.magic("inherit")
+      | Some(Boolean(value)) => Obj.magic(value)
+      | Some(StringArray(value)) => Obj.magic(value)
+      | None => Obj.magic(undefined)
+      },
+      write: switch permission.write {
+      | Some(Inherit) => Obj.magic("inherit")
+      | Some(Boolean(value)) => Obj.magic(value)
+      | Some(StringArray(value)) => Obj.magic(value)
+      | Some(UrlArray(value)) => Obj.magic(value)
+      | None => Obj.magic(undefined)
+      },
+    })
+}
+
+module PermissionsOptions = {
+  type t =
+    | Inherit
+    | None
+    | PermissionsObject(PermissionsObject.t)
+
+  let unwrap = options =>
+    switch options {
+    | Inherit => Obj.magic("inherit")
+    | None => Obj.magic("none")
+    | PermissionsObject(value) => value->PermissionsObject.unwrap
+    }
+}
+
+module BenchDefinition = {
+  type fn = Fn(BenchContext.t => unit) | Promise(Promise.t<unit>)
+  type t = {
+    name: string,
+    fn: fn,
+    ignore?: bool,
+    group?: string,
+    baseline?: bool,
+    only?: bool,
+    sanitizeExit?: bool,
+    permissions?: PermissionsOptions.t,
+  }
+
+  let unwrap = (definition: t) =>
+    Obj.magic({
+      name: definition.name,
+      fn: switch definition.fn {
+      | Fn(fn) => Obj.magic(fn)
+      | Promise(value) => Obj.magic(value)
+      },
+      ignore: switch definition.ignore {
+      | Some(value) => Obj.magic(value)
+      | None => Obj.magic(undefined)
+      },
+      group: switch definition.group {
+      | Some(value) => Obj.magic(value)
+      | None => Obj.magic(undefined)
+      },
+      baseline: switch definition.baseline {
+      | Some(value) => Obj.magic(value)
+      | None => Obj.magic(undefined)
+      },
+      only: switch definition.only {
+      | Some(value) => Obj.magic(value)
+      | None => Obj.magic(undefined)
+      },
+      sanitizeExit: switch definition.sanitizeExit {
+      | Some(value) => Obj.magic(value)
+      | None => Obj.magic(undefined)
+      },
+      permissions: switch definition.permissions {
+      | Some(permissions) => permissions->PermissionsOptions.unwrap
+      | None => Obj.magic(undefined)
+      },
+    })
+}
+
+module TestDefinition = {
+  type fn = Fn(unit => unit) | Promise(Promise.t<unit>)
+  type t = {
+    name: string,
+    fn: fn,
+    ignore?: bool,
+  }
+
+  let unwrap = (definition: t) =>
+    Obj.magic({
+      name: definition.name,
+      fn: switch definition.fn {
+      | Fn(fn) => Obj.magic(fn)
+      | Promise(value) => Obj.magic(value)
+      },
+      ignore: switch definition.ignore {
+      | Some(value) => Obj.magic(value)
+      | None => Obj.magic(undefined)
+      },
+    })
+}
+
+@scope("Deno") external _test: 'a => unit = "test"
+@scope("Deno") let test = (d: TestDefinition.t) => _test(d->TestDefinition.unwrap)
+@scope("Deno") external _bench: 'a => unit = "bench"
+@scope("Deno") let bench = (b: BenchDefinition.t) => _bench(b->BenchDefinition.unwrap)
